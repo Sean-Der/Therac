@@ -12,11 +12,12 @@ use Therac\WebSocket\Base as TheracWebSocket;
 use Therac\Xdebug\Base as TheracXdebug;
 
 class Therac {
-  private $webSocket;
-  private $Xdebug;
+  public $webSocket;
+  public $Xdebug;
 
   const WEBSOCK_PORT = 4433;
   const XDEBUG_PORT = 9089;
+  const BASE_DIRECTORY = '/home/sdubois/development/playground';
 
   public function start() {
     $loop = Factory::create();

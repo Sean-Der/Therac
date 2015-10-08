@@ -4,10 +4,11 @@ use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 
 class Base implements MessageComponentInterface {
+    use Handle, Emit;
     protected $clients;
     protected $Therac;
 
-    public function __construct($Therac) {
+    function __construct($Therac) {
         $this->Therac = $Therac;
         $this->clients = new \SplObjectStorage;
     }
@@ -17,6 +18,22 @@ class Base implements MessageComponentInterface {
     }
 
     public function onMessage(ConnectionInterface $from, $msg) {
+        $msg = json_decode($msg, true);
+        if (isset($msg) && is_array($msg) && isset($msg['event']) && isset($msg['data'])) {
+            try {
+                $method = new \ReflectionMethod(__CLASS__, 'handle' . $msg['event']);
+                if ($method->getNumberOfParameters() === count($msg['data'])) {
+                    $method->setAccessible(true);
+                    $method->invokeArgs($this, $msg['data']);
+                } else {
+                    echo "Parameter count mismatch for: {$msg['event']}\n";
+                }
+            } catch (\Exception $e) {
+                echo "No such WebSocket handler: {$e->getMessage()}\n";
+            }
+        } else {
+            echo "Invalid WebSocket Input\n";
+        }
     }
 
     public function onClose(ConnectionInterface $conn) {
