@@ -68,4 +68,36 @@ class Base {
             $this->transaction_id = 0;
             $this->activeConn = $conn;
     }
+    private function valueResponseToString($response) {
+        $attributes = $response->attributes();
+        $value = (string) $response;
+        if (isset($attributes['encoding']) && $attributes['encoding'] == 'base64') {
+            $value = base64_decode($value);
+        }
+
+        switch ($attributes['type']) {
+        case 'string':
+            return "\"$value\"";
+        case 'int':
+            return $value;
+        case 'bool':
+            return ($value == '0'? 'false':'true');
+        case 'null':
+            return 'null';
+        case 'array':
+            $value = '';
+            $childCount = count($response->children());
+            foreach ($response->children() as $child) {
+                $value = $value . $this->evalResponseToString($child);
+                if ($childCount-- > 1) {
+                    $value = $value . ', ';
+                }
+            }
+            return "[ $value ]";
+        default:
+            return 'failed to decode ' . $attributes['type'];
+
+        }
+    }
+
 }
