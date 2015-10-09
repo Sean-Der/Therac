@@ -9,6 +9,8 @@ class Base {
     private $transaction_id;
     private $breakPoints = [];
 
+    const XML_LEN_HEADER = '/<\?xml version="1.0" encoding="iso-8859-1"\?>/';
+
     /* Public API */
     public function setBreakpoint($file, $line) {
         $this->breakPoints[] = [
@@ -30,26 +32,33 @@ class Base {
             $this->setState($conn);
 
             $this->activeConn->on('data', function ($input) {
-                $xml = simplexml_load_string(strstr($input, '<'));
-                $event = $xml->getName();
-                if (!$event) {
-                    return $this->closeActiveConn();
+                $docs = preg_split(self::XML_LEN_HEADER, $input, -1, PREG_SPLIT_NO_EMPTY);
+                for ($i = 0; $i < count($docs); $i++) {
+                    if (($i % 2) == 0) unset ($docs[$i]);
                 }
 
-
-                switch ($event) {
-                case 'init':
-                    $this->handleInit($xml);
-                    if (isset($this->activeConn)) {
-                        $this->emitRun();
+                foreach ($docs as $doc) {
+                    $xml = simplexml_load_string($doc);
+                    $event = $xml->getName();
+                    if (!$event) {
+                        return $this->closeActiveConn();
                     }
-                    break;
-                case 'response':
-                    $this->handleResponse($xml);
-                    break;
-                default:
-                    var_dump($input);
-                    $this->closeActiveConn();
+
+                    switch ($event) {
+                    case 'init':
+                        $this->handleInit($xml);
+                        if (isset($this->activeConn)) {
+                            $this->emitRun();
+                        }
+                        break;
+                    case 'response':
+                        $this->handleResponse($xml);
+                        break;
+                    default:
+                        var_dump($input);
+                        $this->closeActiveConn();
+                    }
+
                 }
 
             });

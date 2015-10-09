@@ -18,6 +18,8 @@ trait Handle {
         if ($cmd === 'run') {
             switch ($attributes['status']) {
             case 'break':
+                $childAttributes = $msg->children('xdebug', true)->attributes();
+                $this->Therac->WebSocket->emitBreak((string) $childAttributes['filename'], (string) $childAttributes['lineno']);
                 break;
             case 'stopping':
                 $this->emitRun();
