@@ -1,0 +1,9 @@
+@import "../../node_modules/codemirror/lib/codemirror.css";
+
+.CodeMirror-linebreak {
+  background-color: lightblue;
+}
+
+.CodeMirror-breakpoints {
+  width: 1em;
+}

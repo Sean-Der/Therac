@@ -1,7 +1,9 @@
 <?php
 namespace Therac\WebSocket;
+
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
+use Therac\Main\Therac;
 
 class Base implements MessageComponentInterface {
     use Handle, Emit;
@@ -15,6 +17,7 @@ class Base implements MessageComponentInterface {
 
     public function onOpen(ConnectionInterface $conn) {
         $this->clients->attach($conn);
+        $this->emitDirectoryListing(Therac::BASE_DIRECTORY);
     }
 
     public function onMessage(ConnectionInterface $from, $msg) {

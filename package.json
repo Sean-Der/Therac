@@ -5,8 +5,8 @@
   "main": "web/js/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "watchify -v -t brfs web/js/index.js -o web/public_html/bundle.js",
-    "build": "browserify -t brfs web/js/index.js -o web/public_html/bundle.js"
+    "watch": "watchify -v -t [ hbsfy -t ] -t browserify-css web/js/index.js -o web/public_html/bundle.js",
+    "build": "browserify  -t [ hbsfy -t ] -t [ browserify-css --minify=true ] web/js/index.js | uglifyjs -c > web/public_html/bundle.js"
   },
   "repository": {
     "type": "git",
@@ -20,17 +20,18 @@
   ],
   "author": "Sean-Der",
   "license": "MIT",
-  "bugs": {
-    "url": ""
-  },
   "devDependencies": {
     "browserify": "~11.2.0",
-    "underscore": "~1.8.3",
     "watchify": "~3.4.0",
-    "brfs": "~1.4.1",
-    "pure": "~2.67.0",
     "backbone": "~1.2.3",
     "codemirror": "~5.7.0",
-    "jquery": "~2.1.4"
+    "jquery": "~2.1.4",
+    "term.js": "0.0.7",
+    "uglify-js": "~2.4.24",
+    "browserify-css": "~0.7.1",
+    "hbsfy": "~2.3.1",
+    "purecss": "~0.6.0",
+    "handlebars": "~4.0.3",
+    "lodash": "~3.10.1"
   }
 }

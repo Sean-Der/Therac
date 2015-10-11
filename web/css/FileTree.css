@@ -1,0 +1,8 @@
+#file-tree-container li {
+  list-style: none;
+}
+
+#file-tree-container ul {
+  padding-left: 20px;
+}
+
