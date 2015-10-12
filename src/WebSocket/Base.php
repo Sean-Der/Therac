@@ -7,8 +7,18 @@ use Therac\Main\Therac;
 
 class Base implements MessageComponentInterface {
     use Handle, Emit;
+
     protected $clients;
     protected $Therac;
+
+    private $lastEmittedFile = NULL;
+
+    const REPLInput = 'REPLInput', REPLOutput = 'REPLOutput', REPLError = 'REPLError';
+    const REPLPrompt = 'therac> ';
+
+    private $REPLState = [
+        ['data' => self::REPLPrompt, 'type' => self::REPLInput]
+    ];
 
     function __construct($Therac) {
         $this->Therac = $Therac;
@@ -17,7 +27,17 @@ class Base implements MessageComponentInterface {
 
     public function onOpen(ConnectionInterface $conn) {
         $this->clients->attach($conn);
+
         $this->emitDirectoryListing(Therac::BASE_DIRECTORY);
+
+        if ($this->lastEmittedFile) {
+            $this->emitFileContents($this->lastEmittedFile);
+        }
+
+        foreach ($this->REPLState as $line) {
+            $this->baseEmit($line['type'], [$line['data']]);
+        }
+
     }
 
     public function onMessage(ConnectionInterface $from, $msg) {

@@ -15,20 +15,31 @@ trait Handle {
         $attributes = $msg->attributes();
         $cmd = (string) $attributes['command'];
 
-        if ($cmd === 'run') {
+        if ($cmd === 'run' || $cmd === 'step_over') {
             switch ($attributes['status']) {
             case 'break':
                 $childAttributes = $msg->children('xdebug', true)->attributes();
-                $this->Therac->WebSocket->emitBreak((string) $childAttributes['filename'], (string) $childAttributes['lineno']);
+                $file = str_replace('file://', "", $childAttributes['filename']);
+                $this->activeBreak = [
+                    'file' => $file,
+                    'line' => (string) $childAttributes['lineno'],
+                ];
+                $this->Therac->WebSocket->emitFileContents($file);
                 break;
             case 'stopping':
+                $this->activeBreak = NULL;
+                $this->emitBreakpoint(null, null);
                 $this->emitRun();
                 break;
             default:
                 //var_dump($attributes);
             }
         } else if ($cmd === 'eval') {
-            $this->Therac->WebSocket->emitEvalAtBreakpoint($this->valueResponseToString($msg->children()));
+            try {
+                $this->Therac->WebSocket->emitREPLOutput($this->valueResponseToString($msg->children()));
+            } catch (\Exception $e) {
+                $this->Therac->WebSocket->emitREPLError($e->getMessage());
+            }
         }
     }
 

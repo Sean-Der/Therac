@@ -30,8 +30,14 @@ module.exports = require('backbone').Model.extend({
   emitSetBreakpoint: function(file, line) {
     this._emitterBase('setBreakpoint', [file, line]);
   },
-  emitEvalAtBreakpoint: function(line) {
-    this._emitterBase('evalAtBreakpoint', [line]);
+  emitREPLInput: function(input) {
+    this._emitterBase('REPLInput', [input]);
+  },
+  emitRun: function() {
+    this._emitterBase('run', []);
+  },
+  emitStepOver: function() {
+    this._emitterBase('stepOver', []);
   },
 
   /* Handlers */
@@ -46,6 +52,15 @@ module.exports = require('backbone').Model.extend({
   },
   _handleBreak: function(file, lineNum) {
     this.codeMirror.setBreak(file, lineNum);
+  },
+  _handleREPLInput: function(input) {
+    this.REPL.writeInput(input);
+  },
+  _handleREPLOutput: function(output) {
+    this.REPL.writeOutput(output);
+  },
+  _handleREPLError: function(error) {
+    this.REPL.writeError(error);
   },
 
   _onMessage: function(e) {

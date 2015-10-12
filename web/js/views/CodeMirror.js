@@ -1,9 +1,12 @@
 require('../../css/CodeMirror.css');
 
 var CodeMirror = require('codemirror'),
-    _ = require('lodash');
+    _ = require('lodash'),
+    CodeMirrorPanel = require('../../templates/CodeMirrorPanel.hbs'),
+    $ = require('jquery');
 require('codemirror/addon/edit/matchbrackets.js');
 require('codemirror/addon/selection/active-line.js');
+require('codemirror/addon/display/panel.js');
 
 require('codemirror/mode/htmlmixed/htmlmixed.js');
 require('codemirror/mode/javascript/javascript.js');
@@ -14,6 +17,18 @@ require('codemirror/mode/php/php.js');
 
 module.exports = require('backbone').View.extend({
     activeFile: '',
+
+    events: {
+        "click a.CodeMirror-step-over" : "_onStepOver",
+        "click a.CodeMirror-run" : "_onRun",
+    },
+
+    _onRun: function (){
+        this.webSocket.emitRun();
+    },
+    _onStepOver: function (){
+        this.webSocket.emitStepOver();
+    },
 
     initialize: function(args) {
         this.webSocket = args.webSocket;
@@ -31,6 +46,11 @@ module.exports = require('backbone').View.extend({
         this.editor.on("gutterClick", _.bind(function(cm, n) {
             this.webSocket.emitSetBreakpoint(this.activeFile, n + 1);
         }, this));
+
+        var panel= document.createElement('div');
+        panel.innerHTML = CodeMirrorPanel();
+        panel.className = 'CodeMirror-panel';
+        this.editor.addPanel(panel, {position: "bottom"});
     },
     setEditorValue: function(file, value) {
         this.activeFile = file;

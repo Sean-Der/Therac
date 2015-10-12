@@ -7,6 +7,9 @@ trait Emit {
     public function emitRun() {
         $this->emitBase("run {$this->getNewTransactionId()}\00");
     }
+    public function emitStepOver() {
+        $this->emitBase("step_over {$this->getNewTransactionId()}\00");
+    }
 
     public function emitEvalAtBreakpoint($line) {
         $encoded = base64_encode($line);
@@ -20,10 +23,9 @@ trait Emit {
 
     private function emitBase($line) {
         if (!isset($this->activeConn)) {
-            throw new Exception('No active Xdebug connection');
+            return $this->Therac->WebSocket->emitREPLError('No active Xdebug connection');
         }
         $this->activeConn->write($line);
-
     }
 
 }

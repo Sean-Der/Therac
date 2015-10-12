@@ -1,1 +1,5 @@
 @import "../../node_modules/purecss/build/pure-min.css";
+
+#REPL-container {
+  padding-top: 2em;
+}

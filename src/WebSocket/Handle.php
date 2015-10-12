@@ -4,12 +4,24 @@ namespace Therac\WebSocket;
 use Therac\Main\Therac;
 
 trait Handle {
+    protected function handleRun() {
+        $this->Therac->Xdebug->emitRun();
+    }
+    protected function handleStepOver() {
+        $this->Therac->Xdebug->emitStepOver();
+    }
     protected function handleSetBreakpoint($file, $line) {
         $this->Therac->Xdebug->setBreakpoint(Therac::BASE_DIRECTORY . $file, $line);
         $this->emitBreakpointSet($file, $line);
     }
-    protected function handleEvalAtBreakpoint($line) {
-        $this->Therac->Xdebug->emitEvalAtBreakpoint($line);
+    protected function handleREPLInput($input) {
+        if ($input === "\r") {
+            $currentREPLInput = str_replace(self::REPLPrompt, "", end($this->REPLState)['data']);
+            $this->Therac->Xdebug->emitEvalAtBreakpoint($currentREPLInput);
+            reset($this->REPLState);
+        } else {
+            $this->emitREPLInput($input);
+        }
     }
 
     //TODO -- make sure these don't escape the project root
