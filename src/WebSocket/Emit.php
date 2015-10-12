@@ -74,12 +74,14 @@ trait Emit {
         $this->emitREPLInput(self::REPLPrompt);
     }
 
-    private function baseEmit($event, $data) {
+    private function baseEmit($event, $data, $clients = []) {
         $json = json_encode([
             'event' => $event,
             'data' => $data,
         ], JSON_UNESCAPED_SLASHES);
-        foreach ($this->clients as $client) {
+
+        $clients = (empty($clients)) ? $this->clients : $clients;
+        foreach ($clients as $client) {
             $client->send($json);
         }
     }

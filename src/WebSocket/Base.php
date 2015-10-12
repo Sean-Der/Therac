@@ -35,7 +35,7 @@ class Base implements MessageComponentInterface {
         }
 
         foreach ($this->REPLState as $line) {
-            $this->baseEmit($line['type'], [$line['data']]);
+            $this->baseEmit($line['type'], [$line['data']], [$conn]);
         }
 
     }
