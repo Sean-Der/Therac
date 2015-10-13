@@ -3,19 +3,28 @@ namespace Therac\Xdebug;
 
 trait Connection {
 
+    private $dataCache = '';
     private function connectionLoop() {
         $this->xdebugConn->listen($this->listenPort);
         $this->xdebugConn->on('connection', function($conn) {
+
             if (isset($this->activeConn)) {
                 return $conn->close();
             }
             $this->setState($conn);
 
-            $this->activeConn->on('data', function ($input) {
-                $docs = preg_split(self::XML_LEN_HEADER, $input, -1, PREG_SPLIT_NO_EMPTY);
-                for ($i = 0; $i < count($docs); $i++) {
-                    if (($i % 2) == 0) unset ($docs[$i]);
+            $this->activeConn->on('data', function ($data) {
+
+                $data = preg_replace( '/[^[:print:]]/', '', $data);
+                if (!empty($this->dataCache)) {
+                    $data = $this->dataCache . $data;
+                    $this->dataCache = '';
                 }
+                if (substr($data, -1) !== '>') {
+                    return $this->dataCache .= $data;
+                }
+
+                $docs = preg_split(self::XML_LEN_HEADER, $data, -1, PREG_SPLIT_NO_EMPTY);
 
                 foreach ($docs as $doc) {
                     $xml = simplexml_load_string($doc);

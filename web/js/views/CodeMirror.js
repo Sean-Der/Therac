@@ -19,6 +19,7 @@ module.exports = require('backbone').View.extend({
     BREAK_CSS_CLASS: 'CodeMirror-linebreak',
 
     activeFile: '',
+    currentBreak: null,
 
     events: {
         "click a.CodeMirror-step-over" : "_onStepOver",
@@ -69,8 +70,10 @@ module.exports = require('backbone').View.extend({
     },
     setBreak: function(file, lineNum) {
         if (file === null || lineNum === null) {
-            this.editor.removeLineClass(this.currentBreak, 'background', this.BREAK_CSS_CLASS);
-            this.currentBreak = lineNum;
+            if (this.currentBreak !== null) {
+                this.editor.removeLineClass(this.currentBreak, 'background', this.BREAK_CSS_CLASS);
+            }
+            this.currentBreak = null;
         } else {
             var lineNum = parseInt(lineNum) - 1;
             this.currentBreak = lineNum;

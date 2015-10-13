@@ -11,7 +11,7 @@ class Base {
     private $breakPoints = [];
     private $activeBreak = NULL;
 
-    const XML_LEN_HEADER = '/<\?xml version="1.0" encoding="iso-8859-1"\?>/';
+    const XML_LEN_HEADER = '/\d+<\?xml version="1.0" encoding="iso-8859-1"\?>/';
 
     /* Public API */
     public function setBreakpoint($file, $line) {
