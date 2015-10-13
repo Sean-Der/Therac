@@ -16,6 +16,8 @@ require('codemirror/mode/clike/clike.js');
 require('codemirror/mode/php/php.js');
 
 module.exports = require('backbone').View.extend({
+    BREAK_CSS_CLASS: 'CodeMirror-linebreak',
+
     activeFile: '',
 
     events: {
@@ -66,8 +68,14 @@ module.exports = require('backbone').View.extend({
         }());
     },
     setBreak: function(file, lineNum) {
-        lineNum = parseInt(lineNum) - 1;
-        this.currentBreak = lineNum;
-        this.editor.addLineClass(lineNum, 'background', 'CodeMirror-linebreak');
+        if (file === null || lineNum === null) {
+            this.editor.removeLineClass(this.currentBreak, 'background', this.BREAK_CSS_CLASS);
+            this.currentBreak = lineNum;
+        } else {
+            var lineNum = parseInt(lineNum) - 1;
+            this.currentBreak = lineNum;
+            this.editor.addLineClass(lineNum, 'background', this.BREAK_CSS_CLASS);
+        }
+
     }
 });

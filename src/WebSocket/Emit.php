@@ -48,6 +48,10 @@ trait Emit {
         $this->baseREPL(self::REPLError, $error);
         $this->newREPLPrompt();
     }
+    public function emitREPLStdout($error) {
+        $this->baseREPL(self::REPLStdout, $error);
+        $this->newREPLPrompt();
+    }
 
     /* Private API */
     private function baseREPL($type, $data) {

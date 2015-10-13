@@ -13,7 +13,7 @@ class Base implements MessageComponentInterface {
 
     private $lastEmittedFile = NULL;
 
-    const REPLInput = 'REPLInput', REPLOutput = 'REPLOutput', REPLError = 'REPLError';
+    const REPLInput = 'REPLInput', REPLOutput = 'REPLOutput', REPLError = 'REPLError', REPLStdout = 'REPLStdout';
     const REPLPrompt = 'therac> ';
 
     private $REPLState = [

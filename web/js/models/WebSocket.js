@@ -62,6 +62,9 @@ module.exports = require('backbone').Model.extend({
   _handleREPLError: function(error) {
     this.REPL.writeError(error);
   },
+  _handleREPLStdout: function(stdout) {
+    this.REPL.writeStdout(stdout);
+  },
 
   _onMessage: function(e) {
     var msg = JSON.parse(e.data),

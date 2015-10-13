@@ -16,6 +16,10 @@ trait Emit {
         $this->emitBase("eval {$this->getNewTransactionId()} -- $encoded\00");
     }
 
+    private function emitStdout() {
+        $this->emitBase("stdout {$this->getNewTransactionId()} -c 1\00");
+    }
+
     /* Private API */
     private function emitBreakpoint($file, $line) {
         $this->emitBase("breakpoint_set {$this->getNewTransactionId()} -t line -f $file -n $line\00");

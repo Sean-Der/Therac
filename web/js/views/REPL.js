@@ -30,6 +30,9 @@ module.exports = require('backbone').View.extend({
     },
     writeError: function(error) {
         this.term.write('\r\n\x1b[31m'+ error + '\x1b[m');
+    },
+    writeStdout: function(stdout) {
+        this.term.write('\r\n\x1b[33m'+ stdout + '\x1b[m');
     }
 
 });
