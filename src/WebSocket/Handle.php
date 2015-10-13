@@ -14,6 +14,10 @@ trait Handle {
         $this->Therac->Xdebug->setBreakpoint(Therac::BASE_DIRECTORY . $file, $line);
         $this->emitBreakpointSet($file, $line);
     }
+    protected function handleRemoveBreakpoint($file, $line) {
+        $this->Therac->Xdebug->removeBreakpoint(Therac::BASE_DIRECTORY . $file, $line);
+        $this->emitBreakpointRemove($file, $line);
+    }
     protected function handleREPLInput($input) {
         if ($input === "\r") {
             $currentREPLInput = str_replace(self::REPLPrompt, "", end($this->REPLState)['data']);

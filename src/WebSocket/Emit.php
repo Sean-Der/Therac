@@ -8,6 +8,9 @@ trait Emit {
     public function emitBreakpointSet($file, $line) {
         $this->baseEmit('breakPointSet', [$file, $line]);
     }
+    public function emitBreakpointRemove($file, $line) {
+        $this->baseEmit('breakPointRemove', [$file, $line]);
+    }
     public function emitBreak($file, $line) {
         $this->baseEmit('break', [$file, $line]);
     }

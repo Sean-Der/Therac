@@ -17,6 +17,7 @@ require('codemirror/mode/php/php.js');
 
 module.exports = require('backbone').View.extend({
     BREAK_CSS_CLASS: 'CodeMirror-linebreak',
+    BREAKPOINT_CSS_CLASS: "CodeMirror-breakpoints",
 
     activeFile: '',
     currentBreak: null,
@@ -47,7 +48,11 @@ module.exports = require('backbone').View.extend({
         });
 
         this.editor.on("gutterClick", _.bind(function(cm, n) {
-            this.webSocket.emitSetBreakpoint(this.activeFile, n + 1);
+            if (this.editor.lineInfo(n).gutterMarkers) {
+                this.webSocket.emitRemoveBreakpoint(this.activeFile, n + 1);
+            } else {
+                this.webSocket.emitSetBreakpoint(this.activeFile, n + 1);
+            }
         }, this));
 
         var panel= document.createElement('div');
@@ -60,13 +65,13 @@ module.exports = require('backbone').View.extend({
         this.editor.setValue(value);
     },
     setBreakpoint: function(file, lineNum) {
-        this.editor.setGutterMarker(lineNum - 1, "CodeMirror-breakpoints", this.editor.lineInfo(lineNum - 1).gutterMarkers ? null : function() {
-            var marker = document.createElement("div");
-            marker.style.color = "red";
-            marker.innerHTML = "➜";
-            return marker;
-
-        }());
+        var marker = document.createElement("div");
+        marker.style.color = "red";
+        marker.innerHTML = "➜";
+        this.editor.setGutterMarker(lineNum - 1, this.BREAKPOINT_CSS_CLASS, marker);
+    },
+    removeBreakpoint: function(file, lineNum) {
+        this.editor.setGutterMarker(lineNum - 1, this.BREAKPOINT_CSS_CLASS, null);
     },
     setBreak: function(file, lineNum) {
         if (file === null || lineNum === null) {

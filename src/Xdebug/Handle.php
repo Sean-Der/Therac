@@ -41,7 +41,7 @@ trait Handle {
             return $this->closeActiveConn();
         }
         foreach ($this->breakPoints as $breakPoint) {
-            $this->emitBreakpoint($breakPoint['file'], $breakPoint['line']);
+            $this->emitBreakpointSet($breakPoint['file'], $breakPoint['line']);
         }
     }
 
@@ -68,6 +68,12 @@ trait Handle {
                 break;
             default:
                 //var_dump($attributes);
+            }
+        } else if ($cmd === 'breakpoint_set') {
+            foreach ($this->breakPoints as &$breakPoint) {
+                if ($breakPoint['transactionId'] === (string) $attributes['transaction_id']) {
+                    $breakPoint['id'] = (string) $attributes['id'];
+                }
             }
         } else if ($cmd === 'eval') {
             try {

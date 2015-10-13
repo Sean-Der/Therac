@@ -21,8 +21,19 @@ trait Emit {
     }
 
     /* Private API */
-    private function emitBreakpoint($file, $line) {
-        $this->emitBase("breakpoint_set {$this->getNewTransactionId()} -t line -f $file -n $line\00");
+    private function emitBreakpointSet($file, $line) {
+        $transaction_id = $this->getNewTransactionId();
+        $this->emitBase("breakpoint_set $transaction_id -t line -f file://$file -n $line\00");
+
+        foreach ($this->breakPoints as &$breakPoint) {
+            if ($breakPoint['file'] === $file && $breakPoint['line'] === $line) {
+                 $breakPoint['transactionId'] = str_replace('-i ', '', $transaction_id);
+            }
+        }
+    }
+
+    private function emitBreakpointRemove($id) {
+        $this->emitBase("breakpoint_remove {$this->getNewTransactionId()} -d $id\00");
     }
 
     private function emitBase($line) {
