@@ -4,6 +4,7 @@ namespace Therac\Xdebug;
 class Base {
     use Handle, Emit;
     protected $Therac;
+    protected $xdebugConn;
 
     private $activeConn;
     private $transaction_id;
@@ -37,9 +38,17 @@ class Base {
     }
 
     /* Private API */
-    function __construct($xdebugConn, $Therac) {
+    function __construct($xdebugConn, $listenPort, $Therac) {
         $this->Therac = $Therac;
-        $xdebugConn->on('connection', function($conn) {
+        $this->xdebugConn = $xdebugConn;
+        $this->listenPort = $listenPort;
+        $this->connectionLoop();
+    }
+
+
+    private function connectionLoop() {
+        $this->xdebugConn->listen($this->listenPort);
+        $this->xdebugConn->on('connection', function($conn) {
             if (isset($this->activeConn)) {
                 return $conn->close();
             }
@@ -86,6 +95,9 @@ class Base {
     private function closeActiveConn() {
         $this->activeConn->close();
         $this->activeConn = null;
+        $this->xdebugConn->shutdown();
+        sleep(1);
+        $this->connectionLoop();
     }
     private function setState($conn) {
             $this->transaction_id = 0;

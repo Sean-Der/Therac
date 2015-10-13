@@ -23,8 +23,7 @@ class Therac {
     $loop = Factory::create();
 
     $xdebugConn = new Server($loop);
-    $xdebugConn->listen(self::XDEBUG_PORT);
-    $this->Xdebug = new TheracXdebug($xdebugConn, $this);
+    $this->Xdebug = new TheracXdebug($xdebugConn, self::XDEBUG_PORT, $this);
 
     $webSock = new Server($loop);
     $webSock->listen(self::WEBSOCK_PORT, '0.0.0.0');

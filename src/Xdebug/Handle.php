@@ -28,8 +28,8 @@ trait Handle {
                 break;
             case 'stopping':
                 $this->activeBreak = NULL;
-                $this->emitBreakpoint(null, null);
                 $this->emitRun();
+                $this->closeActiveConn();
                 break;
             default:
                 //var_dump($attributes);
