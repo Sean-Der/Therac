@@ -69,7 +69,7 @@ class Base {
 
         switch ($attributes['type']) {
         case 'string':
-            return "\"$value\"";
+            return "'$value'";
         case 'int':
             return $value;
         case 'bool':
@@ -80,7 +80,13 @@ class Base {
             $value = '';
             $childCount = count($response->children());
             foreach ($response->children() as $child) {
-                $value = $value . $this->valueResponseToString($child);
+                $childAttributes = $child->attributes();
+
+                if (!is_numeric((string) $childAttributes['name'])) {
+                    $value .= "'{$childAttributes['name']}'" . ' => ';
+                }
+                $value .= $this->valueResponseToString($child);
+
                 if ($childCount-- > 1) {
                     $value = $value . ', ';
                 }
