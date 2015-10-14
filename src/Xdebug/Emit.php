@@ -10,17 +10,23 @@ trait Emit {
     public function emitStepOver() {
         $this->emitBase("step_over {$this->getNewTransactionId()}\00");
     }
-
+    public function emitStepInto() {
+        $this->emitBase("step_into {$this->getNewTransactionId()}\00");
+    }
+    public function emitStepOut() {
+        $this->emitBase("step_out {$this->getNewTransactionId()}\00");
+    }
     public function emitEvalAtBreakpoint($line) {
         $encoded = base64_encode($line);
         $this->emitBase("eval {$this->getNewTransactionId()} -- $encoded\00");
     }
 
+
+    /* Private API */
     private function emitStdout() {
         $this->emitBase("stdout {$this->getNewTransactionId()} -c 1\00");
     }
 
-    /* Private API */
     private function emitBreakpointSet($file, $line) {
         $transaction_id = $this->getNewTransactionId();
         $this->emitBase("breakpoint_set $transaction_id -t line -f file://$file -n $line\00");

@@ -42,6 +42,12 @@ module.exports = require('backbone').Model.extend({
   emitStepOver: function() {
     this._emitterBase('stepOver', []);
   },
+  emitStepInto: function() {
+    this._emitterBase('stepInto', []);
+  },
+  emitStepOut: function() {
+    this._emitterBase('stepOut', []);
+  },
 
   /* Handlers */
   _handleDirectoryListing: function(directory, children) {

@@ -49,7 +49,7 @@ trait Handle {
         $attributes = $msg->attributes();
         $cmd = (string) $attributes['command'];
 
-        if ($cmd === 'run' || $cmd === 'step_over') {
+        if ($cmd === 'run' || $cmd === 'step_over' || $cmd === 'step_out' || $cmd === 'step_into') {
             switch ($attributes['status']) {
             case 'break':
                 $childAttributes = $msg->children('xdebug', true)->attributes();

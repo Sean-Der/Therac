@@ -25,6 +25,8 @@ module.exports = require('backbone').View.extend({
     events: {
         "click a.CodeMirror-step-over" : "_onStepOver",
         "click a.CodeMirror-run" : "_onRun",
+        "click a.CodeMirror-step-into" : "_onStepInto",
+        "click a.CodeMirror-step-out" : "_onStepOut",
     },
 
     _onRun: function (){
@@ -32,6 +34,12 @@ module.exports = require('backbone').View.extend({
     },
     _onStepOver: function (){
         this.webSocket.emitStepOver();
+    },
+    _onStepInto: function (){
+        this.webSocket.emitStepInto();
+    },
+    _onStepOut: function (){
+        this.webSocket.emitStepOut();
     },
 
     initialize: function(args) {

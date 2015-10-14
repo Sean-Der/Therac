@@ -10,6 +10,12 @@ trait Handle {
     protected function handleStepOver() {
         $this->Therac->Xdebug->emitStepOver();
     }
+    protected function handleStepInto() {
+        $this->Therac->Xdebug->emitStepInto();
+    }
+    protected function handleStepOut() {
+        $this->Therac->Xdebug->emitStepOut();
+    }
     protected function handleSetBreakpoint($file, $line) {
         $this->Therac->Xdebug->setBreakpoint(Therac::BASE_DIRECTORY . $file, $line);
         $this->emitBreakpointSet($file, $line);
