@@ -1,8 +1,10 @@
 <ul>
     {{#each children}}
-    <li data-directory="{{../directory}}/" data-name="{{name}}" {{#if isDir}} class="file-tree-directory" {{else}} class="file-tree-file"{{/if}}>
-        <i {{#if isDir}} class="fa fa-folder" {{else}} class="fa-file-code-o"{{/if}}> </i>
-        {{name}}
+    <li data-directory="{{../directory}}/" data-name="{{name}}">
+        <span {{#if isDir}} class="file-tree-directory" {{else}} class="file-tree-file"{{/if}}>
+            <i {{#if isDir}} class="fa fa-folder" {{else}} class="fa-file-code-o"{{/if}}> </i>
+            {{name}}
+        </span>
         <span class="file-tree-directory-contents"> </span>
     </li>
     {{/each}}

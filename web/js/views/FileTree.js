@@ -7,8 +7,8 @@ Handlebars.registerPartial('FileTree', FileTreeTemplate);
 
 module.exports = require('backbone').View.extend({
     events: {
-        "click li.file-tree-directory" : "onOpenDirectory",
-        "click li.file-tree-file" : "onOpenFile",
+        "click span.file-tree-directory" : "onOpenDirectory",
+        "click span.file-tree-file"      : "onOpenFile",
     },
     initialize: function(args) {
         this.webSocket = args.webSocket;
@@ -26,11 +26,13 @@ module.exports = require('backbone').View.extend({
         }
     },
     onOpenFile: function(e) {
-        var fileName = e.target.getAttribute('data-directory') + e.target.getAttribute('data-name');
+        var parent = e.target.parentElement,
+            fileName = parent.getAttribute('data-directory') + parent.getAttribute('data-name');
         this.webSocket.emitGetFileContents(fileName);
     },
     onOpenDirectory: function(e) {
-        var directory = e.target.getAttribute('data-directory') + e.target.getAttribute('data-name');
+        var parent = e.target.parentElement,
+            directory = parent.getAttribute('data-directory') + parent.getAttribute('data-name');
         this.webSocket.emitGetDirectoryListing(directory);
 
     },
