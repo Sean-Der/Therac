@@ -76,6 +76,20 @@ class Base {
             return ($value == '0'? 'false':'true');
         case 'null':
             return 'null';
+        case 'object':
+            $value = "object({$attributes['classname']}) { ";
+            $childCount = count($response->children());
+            foreach ($response->children() as $child) {
+                $childAttributes = $child->attributes();
+                $value .= "{$childAttributes['facet']} \${$childAttributes['name']} = ";
+                $value .= $this->valueResponseToString($child);
+                if ($childCount-- > 1) {
+                    $value .= ', ';
+                } else {
+                    $value .= ' }';
+                }
+            }
+            return $value;
         case 'array':
             $value = '';
             $childCount = count($response->children());
