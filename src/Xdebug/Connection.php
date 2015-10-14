@@ -5,7 +5,7 @@ trait Connection {
 
     private $dataCache = '';
     private function connectionLoop() {
-        $this->xdebugConn->listen($this->listenPort);
+        $this->xdebugConn->listen($this->Therac->XDEBUG_PORT);
         $this->xdebugConn->on('connection', function($conn) {
 
             if (isset($this->activeConn)) {

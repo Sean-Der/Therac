@@ -15,18 +15,20 @@ class Therac {
   public $webSocket;
   public $Xdebug;
 
-  const WEBSOCK_PORT = 4433;
-  const XDEBUG_PORT = 9089;
-  const BASE_DIRECTORY = '/var/www/default';
+  public $XDEBUG_PORT;
+  public $BASE_DIRECTORY;
 
-  public function start() {
+  function __construct($xdebugPort, $websocketPort, $baseDirectory) {
+    $this->XDEBUG_PORT = $xdebugPort;
+    $this->BASE_DIRECTORY = $baseDirectory;
+
     $loop = Factory::create();
 
     $xdebugConn = new Server($loop);
-    $this->Xdebug = new TheracXdebug($xdebugConn, self::XDEBUG_PORT, $this);
+    $this->Xdebug = new TheracXdebug($xdebugConn, $this);
 
     $webSock = new Server($loop);
-    $webSock->listen(self::WEBSOCK_PORT, '0.0.0.0');
+    $webSock->listen($websocketPort, '0.0.0.0');
     $this->WebSocket = new TheracWebSocket($this);
     new IoServer(new HttpServer(new WsServer($this->WebSocket)), $webSock);
 

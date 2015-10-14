@@ -53,10 +53,9 @@ class Base {
     }
 
     /* Private API */
-    function __construct($xdebugConn, $listenPort, $Therac) {
+    function __construct($xdebugConn, $Therac) {
         $this->Therac = $Therac;
         $this->xdebugConn = $xdebugConn;
-        $this->listenPort = $listenPort;
         $this->connectionLoop();
     }
 
