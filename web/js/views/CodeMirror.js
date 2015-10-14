@@ -83,6 +83,7 @@ module.exports = require('backbone').View.extend({
             var lineNum = parseInt(lineNum) - 1;
             this.currentBreak = lineNum;
             this.editor.addLineClass(lineNum, 'background', this.BREAK_CSS_CLASS);
+            this.editor.scrollIntoView({line: lineNum, ch: 0});
         }
 
     }
