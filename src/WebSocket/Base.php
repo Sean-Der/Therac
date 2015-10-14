@@ -27,7 +27,7 @@ class Base implements MessageComponentInterface {
     public function onOpen(ConnectionInterface $conn) {
         $this->clients->attach($conn);
 
-        $this->emitDirectoryListing($this->Therac->$BASE_DIRECTORY);
+        $this->emitDirectoryListing($this->Therac->BASE_DIRECTORY);
 
         if ($this->lastEmittedFile) {
             $this->emitFileContents($this->lastEmittedFile);

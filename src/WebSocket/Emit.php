@@ -21,13 +21,13 @@ trait Emit {
                 'isDir' => is_dir("$directory/$file"),
             ];
         }
-        $relativeDirectory = str_replace($this->Therac->$BASE_DIRECTORY, "", $directory);
+        $relativeDirectory = str_replace($this->Therac->BASE_DIRECTORY, "", $directory);
         $this->baseEmit('directoryListing', [$relativeDirectory, $scanResult]);
     }
 
     public function emitFileContents($file) {
         $this->lastEmittedFile = $file;
-        $relativeDirectory = str_replace($file, "", str_replace($this->Therac->$BASE_DIRECTORY, "", $file));
+        $relativeDirectory = str_replace($file, "", str_replace($this->Therac->BASE_DIRECTORY, "", $file));
         $this->baseEmit('fileContents', [$relativeDirectory, file_get_contents($file)]);
 
         if (($break = $this->Therac->Xdebug->getActiveBreak()) != NULL && $break['file'] === $file) {
