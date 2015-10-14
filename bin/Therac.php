@@ -27,8 +27,6 @@ if (isset($options['help']) || isset($options['h'])) {
   return 0;
 }
 
-var_dump($options);
-
 $xdebugPort = 9089;
 if (isset($options['xdebug-port'])) {
   $xdebugPort = $options['xdebug-port'];
@@ -36,7 +34,7 @@ if (isset($options['xdebug-port'])) {
   $xdebugPort = $options['x'];
 }
 
-$websocketPort = 9089;
+$websocketPort = 4433;
 if (isset($options['websocket-port'])) {
   $websocketPort = $options['websocket-port'];
 } else if (isset($options['w'])) {
