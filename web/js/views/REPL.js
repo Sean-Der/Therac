@@ -7,8 +7,11 @@ module.exports = require('backbone').View.extend({
     initialize: function(args) {
         this.webSocket = args.webSocket;
     },
-    _onData: function(data) {
-        this.webSocket.emitREPLInput(data);
+    _onKey: function(key, event) {
+        if (event.keyCode === 8) {
+            key = '\b \b';
+        }
+        this.webSocket.emitREPLInput(key);
     },
     render: function() {
         this.term = TermJS({
@@ -18,7 +21,7 @@ module.exports = require('backbone').View.extend({
             cursorBlink: true,
         });
 
-        this.term.on('data', _.bind(this._onData, this));
+        this.term.on('key', _.bind(this._onKey, this));
         this.term.open(this.el);
     },
 

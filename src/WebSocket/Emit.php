@@ -59,7 +59,17 @@ trait Emit {
         $lastLine = end($this->REPLState);
         if ($type === self::REPLInput && $type === $lastLine['type']) {
             $newLine = array_pop($this->REPLState);
-            $newLine['data'] .= $data;
+
+            if ("\x08 \x08" == $data) {
+                if ($newLine['data'] === self::REPLPrompt) {
+                    $data = '';
+                } else {
+                    $newLine['data'] = substr($newLine['data'], 0, -1);
+                }
+            } else {
+                $newLine['data'] .= $data;
+            }
+
         } else {
             if ($type !== self::REPLInput) {
                 $data .= "\r\n";
