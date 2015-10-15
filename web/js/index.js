@@ -21,4 +21,9 @@ var BreakpointsView = require('./views/Breakpoints.js'),
     breakpoints = new BreakpointsView({el: $('#breakpoints-container'), webSocket: webSocket});
 breakpoints.render();
 
-webSocket.setViews(fileTree, codeMirror, REPL, breakpoints);
+var ContextsView = require('./views/Contexts.js'),
+    contexts = new ContextsView({el: $('#contexts-container'), webSocket: webSocket});
+contexts.render();
+
+
+webSocket.setViews(fileTree, codeMirror, REPL, breakpoints, contexts);

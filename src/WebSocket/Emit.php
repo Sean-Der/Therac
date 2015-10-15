@@ -53,6 +53,10 @@ trait Emit {
         $this->newREPLPrompt();
     }
 
+    public function emitActiveContexts() {
+        $this->baseEmit('activeContexts', [$this->Therac->Xdebug->getActiveContexts()]);
+    }
+
     /* Private API */
     private function baseREPL($type, $data) {
         $lastLine = end($this->REPLState);

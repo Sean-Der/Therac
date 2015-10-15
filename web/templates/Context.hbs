@@ -1,0 +1,13 @@
+<table class="pure-table" data-context="{{ name }}">
+<caption> {{name}} </caption>
+<tr>
+  <th> Name </th>
+  <th> Value </th>
+</tr>
+{{#each values}}
+  <tr>
+    <td>{{this.name}}</td>
+    <td>{{this.value}}</td>
+  </tr>
+{{/each}}
+</table>

@@ -49,9 +49,9 @@ trait Handle {
         $attributes = $msg->attributes();
         $cmd = (string) $attributes['command'];
 
-        if ($cmd === 'run' || $cmd === 'step_over' || $cmd === 'step_out' || $cmd === 'step_into') {
-            switch ($attributes['status']) {
-            case 'break':
+        switch ($cmd) {
+        case 'run': case 'step_over': case 'step_out': case 'step_into':
+            if ((string) $attributes['status'] === 'break') {
                 $childAttributes = $msg->children('xdebug', true)->attributes();
                 $file = str_replace('file://', "", $childAttributes['filename']);
                 $this->activeBreak = [
@@ -59,30 +59,50 @@ trait Handle {
                     'line' => (string) $childAttributes['lineno'],
                 ];
                 $this->Therac->WebSocket->emitFileContents($file);
-                break;
-            case 'stopping':
+                $this->emitContextNames();
+            } else if ((string) $attributes['status'] === 'stopping') {
                 $this->activeBreak = NULL;
                 $this->emitRun();
                 $this->Therac->WebSocket->emitBreak(null, null);
                 $this->closeActiveConn();
-                break;
-            default:
-                //var_dump($attributes);
             }
-        } else if ($cmd === 'breakpoint_set') {
-            foreach ($this->breakPoints as &$breakPoint) {
-                if ($breakPoint['transactionId'] === (string) $attributes['transaction_id']) {
-                    $breakPoint['id'] = (string) $attributes['id'];
-                }
-            }
-        } else if ($cmd === 'eval') {
+            break;
+        case 'eval':
             try {
                 $this->Therac->WebSocket->emitREPLOutput($this->valueResponseToString($msg->children()));
+                $this->emitContextNames();
             } catch (\Exception $e) {
                 $this->Therac->WebSocket->emitREPLError($e->getMessage());
             }
-        }
+            break;
+        case 'context_names':
+            $this->activeContexts = [];
+            foreach ($msg->children() as $child) {
+                $this->activeContexts[(string) $child['id']] = [
+                    'name'   => (string) $child['name'],
+                    'id'     => (string) $child['id'],
+                    'values' => [],
+                ];
+                $this->emitContextGet($child['id']);
+            }
+            break;
+        case 'context_get':
+            $contextId = (string) $msg->attributes()['context'];
 
+            foreach ($msg->children() as $child) {
+                $childAttributes = $child->attributes();
+                try {
+                    $this->activeContexts[$contextId]['values'][] =  [
+                        'name'  => (string) $childAttributes['name'],
+                        'value' => $this->valueResponseToString($child),
+                    ];
+                } catch (\Exception $e) {
+                    var_dump($e);
+                }
+            }
+            $this->Therac->WebSocket->emitActiveContexts();
+            break;
+        }
         $this->maybeEmitStreamCaches();
     }
 }

@@ -28,6 +28,7 @@ class Base implements MessageComponentInterface {
         $this->clients->attach($conn);
 
         $this->emitDirectoryListing($this->Therac->BASE_DIRECTORY);
+        $this->emitActiveContexts();
         foreach($this->Therac->Xdebug->getBreakpoints($file) as $breakPoint) {
             $this->emitBreakpointSet($breakPoint['file'], $breakPoint['line']);
         }

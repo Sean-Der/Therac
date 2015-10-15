@@ -13,11 +13,12 @@ module.exports = require('backbone').Model.extend({
   },
 
   /* Public API */
-  setViews: function(fileTree, codeMirror, REPL, breakpoints) {
+  setViews: function(fileTree, codeMirror, REPL, breakpoints, contexts) {
     this.fileTree = fileTree;
     this.codeMirror = codeMirror;
     this.REPL = REPL;
     this.breakpoints = breakpoints;
+    this.contexts = contexts;
 
     this.viewsSet.resolve();
   },
@@ -79,6 +80,9 @@ module.exports = require('backbone').Model.extend({
   },
   _handleREPLStdout: function(stdout) {
     this.REPL.writeStdout(stdout);
+  },
+  _handleActiveContexts: function(contexts) {
+    this.contexts.setContexts(contexts);
   },
 
   _onMessage: function(e) {

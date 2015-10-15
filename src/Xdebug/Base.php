@@ -10,6 +10,7 @@ class Base {
     private $transaction_id;
     private $breakPoints = [];
     private $activeBreak = NULL;
+    private $activeContexts = [];
 
     const XML_LEN_HEADER = '/\d+<\?xml version="1.0" encoding="iso-8859-1"\?>/';
 
@@ -51,6 +52,10 @@ class Base {
     public function getActiveBreak() {
         return $this->activeBreak;
     }
+    public function getActiveContexts() {
+        return $this->activeContexts;
+    }
+
 
     /* Private API */
     function __construct($xdebugConn, $Therac) {
@@ -67,14 +72,16 @@ class Base {
         }
 
         switch ($attributes['type']) {
+        case 'null':
+        case 'uninitialized':
+            return (string )$attributes['type'];
         case 'string':
             return "'$value'";
+        case 'float':
         case 'int':
             return $value;
         case 'bool':
             return ($value == '0'? 'false':'true');
-        case 'null':
-            return 'null';
         case 'object':
             $value = "object({$attributes['classname']}) { ";
             $childCount = count($response->children());

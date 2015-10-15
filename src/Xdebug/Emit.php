@@ -23,6 +23,13 @@ trait Emit {
 
 
     /* Private API */
+    private function emitContextNames() {
+        $this->emitBase("context_names {$this->getNewTransactionId()}\00");
+    }
+    private function emitContextGet($contextId) {
+        $this->emitBase("context_get {$this->getNewTransactionId()} -c $contextId\00");
+    }
+
     private function emitStdout() {
         $this->emitBase("stdout {$this->getNewTransactionId()} -c 1\00");
     }
