@@ -17,4 +17,8 @@ var REPLView = require('./views/REPL.js'),
 REPL.render();
 
 
-webSocket.setViews(fileTree, codeMirror, REPL);
+var BreakpointsView = require('./views/Breakpoints.js'),
+    breakpoints = new BreakpointsView({el: $('#breakpoints-container'), webSocket: webSocket});
+breakpoints.render();
+
+webSocket.setViews(fileTree, codeMirror, REPL, breakpoints);

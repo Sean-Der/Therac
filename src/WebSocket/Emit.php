@@ -4,13 +4,13 @@ namespace Therac\WebSocket;
 trait Emit {
     /* Public API */
     public function emitBreakpointSet($file, $line) {
-        $this->baseEmit('breakPointSet', [$file, $line]);
+        $this->baseEmit('breakPointSet', [$this->stripFullPath($file), $line]);
     }
     public function emitBreakpointRemove($file, $line) {
-        $this->baseEmit('breakPointRemove', [$file, $line]);
+        $this->baseEmit('breakPointRemove', [$this->stripFullPath($file), $line]);
     }
     public function emitBreak($file, $line) {
-        $this->baseEmit('break', [$file, $line]);
+        $this->baseEmit('break', [$this->stripFullPath($file), $line]);
     }
 
     public function emitDirectoryListing($directory) {
@@ -21,17 +21,16 @@ trait Emit {
                 'isDir' => is_dir("$directory/$file"),
             ];
         }
-        $relativeDirectory = str_replace($this->Therac->BASE_DIRECTORY, "", $directory);
-        $this->baseEmit('directoryListing', [$relativeDirectory, $scanResult]);
+        $this->baseEmit('directoryListing', [$this->stripFullPath($directory), $scanResult]);
     }
 
     public function emitFileContents($file) {
         $this->lastEmittedFile = $file;
-        $relativeDirectory = str_replace($file, "", str_replace($this->Therac->BASE_DIRECTORY, "", $file));
+        $relativeDirectory = str_replace($file, "", $this->stripFullPath($file));
         $this->baseEmit('fileContents', [$relativeDirectory, file_get_contents($file)]);
 
         if (($break = $this->Therac->Xdebug->getActiveBreak()) != NULL && $break['file'] === $file) {
-                $this->baseEmit('break', [$break['file'], $break['line']]);
+            $this->emitBreak($break['file'], $break['line']);
         }
         foreach($this->Therac->Xdebug->getBreakpoints($file) as $breakPoint) {
             $this->emitBreakpointSet($breakPoint['file'], $breakPoint['line']);

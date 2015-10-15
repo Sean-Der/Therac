@@ -28,7 +28,7 @@ class Base {
     }
     public function removeBreakpoint($file, $line) {
         $this->breakPoints = array_filter($this->breakPoints, function($breakPoint) use ($file, $line) {
-            if ($breakPoint['file'] === $file && $breakPoint['line'] === $line) {
+            if ($breakPoint['file'] == $file && $breakPoint['line'] == $line) {
                 if ($this->activeConn) {
                     $this->emitBreakpointRemove($breakPoint['id']);
                 }

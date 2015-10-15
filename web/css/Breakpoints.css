@@ -1,0 +1,7 @@
+#breakpoints-container {
+  padding-top: 2em;
+}
+
+.remove-breakpoint {
+  color: red;
+}

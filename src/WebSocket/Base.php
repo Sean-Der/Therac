@@ -28,13 +28,15 @@ class Base implements MessageComponentInterface {
         $this->clients->attach($conn);
 
         $this->emitDirectoryListing($this->Therac->BASE_DIRECTORY);
+        foreach($this->Therac->Xdebug->getBreakpoints($file) as $breakPoint) {
+            $this->emitBreakpointSet($breakPoint['file'], $breakPoint['line']);
+        }
+        foreach ($this->REPLState as $line) {
+            $this->baseEmit($line['type'], [$line['data']], [$conn]);
+        }
 
         if ($this->lastEmittedFile) {
             $this->emitFileContents($this->lastEmittedFile);
-        }
-
-        foreach ($this->REPLState as $line) {
-            $this->baseEmit($line['type'], [$line['data']], [$conn]);
         }
 
     }
@@ -65,5 +67,9 @@ class Base implements MessageComponentInterface {
     public function onError(ConnectionInterface $conn, \Exception $e) {
         echo "An error has occurred: {$e->getMessage()}\n";
         $conn->close();
+    }
+
+    public function stripFullPath($file) {
+        return str_replace($this->Therac->BASE_DIRECTORY, "", $file);
     }
 }

@@ -13,10 +13,11 @@ module.exports = require('backbone').Model.extend({
   },
 
   /* Public API */
-  setViews: function(fileTree, codeMirror, REPL) {
+  setViews: function(fileTree, codeMirror, REPL, breakpoints) {
     this.fileTree = fileTree;
     this.codeMirror = codeMirror;
     this.REPL = REPL;
+    this.breakpoints = breakpoints;
 
     this.viewsSet.resolve();
   },
@@ -58,9 +59,11 @@ module.exports = require('backbone').Model.extend({
   },
   _handleBreakPointSet: function(file, lineNum) {
     this.codeMirror.setBreakpoint(file, lineNum);
+    this.breakpoints.setBreakpoint(file, lineNum);
   },
   _handleBreakPointRemove: function(file, lineNum) {
     this.codeMirror.removeBreakpoint(file, lineNum);
+    this.breakpoints.removeBreakpoint(file, lineNum);
   },
   _handleBreak: function(file, lineNum) {
     this.codeMirror.setBreak(file, lineNum);

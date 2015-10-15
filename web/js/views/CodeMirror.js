@@ -73,6 +73,9 @@ module.exports = require('backbone').View.extend({
         this.editor.setValue(value);
     },
     setBreakpoint: function(file, lineNum) {
+        if (file !== this.activeFile) {
+            return
+        }
         var marker = document.createElement("div");
         marker.style.color = "red";
         marker.innerHTML = "➜";
