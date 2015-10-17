@@ -54,11 +54,12 @@ trait Handle {
             if ((string) $attributes['status'] === 'break') {
                 $childAttributes = $msg->children('xdebug', true)->attributes();
                 $file = str_replace('file://', "", $childAttributes['filename']);
+                $line = (string) $childAttributes['lineno'];
                 $this->activeBreak = [
                     'file' => $file,
-                    'line' => (string) $childAttributes['lineno'],
+                    'line' => $line,
                 ];
-                $this->Therac->WebSocket->emitFileContents($file);
+                $this->Therac->WebSocket->emitFileContents($file, $line);
                 $this->emitContextNames();
             } else if ((string) $attributes['status'] === 'stopping') {
                 $this->activeBreak = NULL;

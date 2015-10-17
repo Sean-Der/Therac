@@ -31,13 +31,17 @@ trait Handle {
             $this->emitREPLInput($input);
         }
     }
+    protected function handleSetActiveLine($line) {
+        $this->emitActiveLineSet($line);
+    }
+
 
     //TODO -- make sure these don't escape the project root
     protected function handleGetDirectoryListing($directory) {
         $this->emitDirectoryListing($this->Therac->BASE_DIRECTORY . $directory);
     }
     protected function handleGetFileContents($file) {
-        $this->emitFileContents($this->Therac->BASE_DIRECTORY . $file);
+        $this->emitFileContents($this->Therac->BASE_DIRECTORY . $file, 0);
     }
 
 }

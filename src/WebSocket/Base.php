@@ -10,7 +10,7 @@ class Base implements MessageComponentInterface {
     protected $clients;
     protected $Therac;
 
-    private $lastEmittedFile = NULL;
+    private $activeFile = ['file' => null, 'line' => 0];
 
     const REPLInput = 'REPLInput', REPLOutput = 'REPLOutput', REPLError = 'REPLError', REPLStdout = 'REPLStdout';
     const REPLPrompt = 'therac> ';
@@ -36,8 +36,8 @@ class Base implements MessageComponentInterface {
             $this->baseEmit($line['type'], [$line['data']], [$conn]);
         }
 
-        if ($this->lastEmittedFile) {
-            $this->emitFileContents($this->lastEmittedFile);
+        if ($this->activeFile['file']) {
+            $this->emitFileContents($this->activeFile['file'], $this->activeFile['line']);
         }
 
     }

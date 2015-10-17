@@ -84,6 +84,9 @@ module.exports = require('backbone').Model.extend({
   _handleActiveContexts: function(contexts) {
     this.contexts.setContexts(contexts);
   },
+  _handleActiveLineSet: function(line) {
+    this.codeMirror.setActiveLine(line);
+  },
 
   _onMessage: function(e) {
     var msg = JSON.parse(e.data),
