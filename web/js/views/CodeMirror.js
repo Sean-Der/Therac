@@ -17,10 +17,12 @@ require('codemirror/mode/php/php.js');
 
 module.exports = require('backbone').View.extend({
     BREAK_CSS_CLASS: 'CodeMirror-linebreak',
+    ACTIVE_CSS_CLASS: 'CodeMirror-activeline',
     BREAKPOINT_CSS_CLASS: "CodeMirror-breakpoints",
 
     activeFile: '',
     currentBreak: null,
+    activeLine: null,
 
     events: {
         "click a.CodeMirror-step-over" : "_onStepOver",
@@ -95,9 +97,19 @@ module.exports = require('backbone').View.extend({
             this.currentBreak = lineNum;
             this.editor.addLineClass(lineNum, 'background', this.BREAK_CSS_CLASS);
         }
-
     },
-    setActiveLine: function(line) {
-        this.editor.scrollIntoView({line: line, ch: 0});
+    setActiveLine: function(lineNum) {
+        this.editor.scrollIntoView({line: lineNum, ch: 0});
+        if (lineNum === null) {
+            if (this.activeLine !== null) {
+                this.editor.removeLineClass(this.activeLine, 'background', this.ACTIVE_CSS_CLASS);
+            }
+            this.activeLine = null;
+        } else {
+            var lineNum = parseInt(lineNum) - 1;
+            this.activeLine = lineNum;
+            this.editor.addLineClass(lineNum, 'background', this.ACTIVE_CSS_CLASS);
+        }
+
     },
 });

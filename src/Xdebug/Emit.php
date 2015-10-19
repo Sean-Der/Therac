@@ -20,14 +20,18 @@ trait Emit {
         $encoded = base64_encode($line);
         $this->emitBase("eval {$this->getNewTransactionId()} -- $encoded\00");
     }
-
+    public function emitContextNames($depth) {
+        $this->activeContext['depth'] = $depth;
+        $this->emitBase("context_names -d $depth {$this->getNewTransactionId()}\00");
+    }
 
     /* Private API */
-    private function emitContextNames() {
-        $this->emitBase("context_names {$this->getNewTransactionId()}\00");
+    private function emitStackGet() {
+        $this->emitBase("stack_get {$this->getNewTransactionId()}\00");
     }
+
     private function emitContextGet($contextId) {
-        $this->emitBase("context_get {$this->getNewTransactionId()} -c $contextId\00");
+        $this->emitBase("context_get -c $contextId -d {$this->activeContext['depth']} {$this->getNewTransactionId()}\00");
     }
 
     private function emitStdout() {

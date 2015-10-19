@@ -28,7 +28,9 @@ class Base implements MessageComponentInterface {
         $this->clients->attach($conn);
 
         $this->emitDirectoryListing($this->Therac->BASE_DIRECTORY);
-        $this->emitActiveContexts();
+        $this->emitActiveContext();
+        $this->emitActiveStack();
+
         foreach($this->Therac->Xdebug->getBreakpoints($file) as $breakPoint) {
             $this->emitBreakpointSet($breakPoint['file'], $breakPoint['line']);
         }
@@ -39,7 +41,6 @@ class Base implements MessageComponentInterface {
         if ($this->activeFile['file']) {
             $this->emitFileContents($this->activeFile['file'], $this->activeFile['line']);
         }
-
     }
 
     public function onMessage(ConnectionInterface $from, $msg) {

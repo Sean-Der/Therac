@@ -13,19 +13,17 @@ module.exports = require('backbone').Model.extend({
   },
 
   /* Public API */
-  setViews: function(fileTree, codeMirror, REPL, breakpoints, contexts) {
+  setViews: function(fileTree, codeMirror, REPL, breakpoints, context, stacks) {
     this.fileTree = fileTree;
     this.codeMirror = codeMirror;
     this.REPL = REPL;
     this.breakpoints = breakpoints;
-    this.contexts = contexts;
+    this.context = context;
+    this.stacks = stacks;
 
     this.viewsSet.resolve();
   },
 
-  emitGetFileContents: function(file) {
-    this._emitterBase('getFileContents', [file]);
-  },
   emitGetDirectoryListing: function(directory) {
     this._emitterBase('getDirectoryListing', [directory]);
   },
@@ -49,6 +47,12 @@ module.exports = require('backbone').Model.extend({
   },
   emitStepOut: function() {
     this._emitterBase('stepOut', []);
+  },
+  emitSetActiveFile: function(file, line) {
+    this._emitterBase('setActiveFile', [file, line]);
+  },
+  emitGetContext: function(depth) {
+    this._emitterBase('getContext', [depth]);
   },
 
   /* Handlers */
@@ -81,11 +85,14 @@ module.exports = require('backbone').Model.extend({
   _handleREPLStdout: function(stdout) {
     this.REPL.writeStdout(stdout);
   },
-  _handleActiveContexts: function(contexts) {
-    this.contexts.setContexts(contexts);
+  _handleActiveContext: function(context) {
+    this.context.setContext(context);
   },
   _handleActiveLineSet: function(line) {
     this.codeMirror.setActiveLine(line);
+  },
+  _handleActiveStack: function(stacks) {
+    this.stacks.setStacks(stacks);
   },
 
   _onMessage: function(e) {

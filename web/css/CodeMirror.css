@@ -4,6 +4,10 @@
   background-color: lightblue;
 }
 
+.CodeMirror-activeline {
+  background-color: yellow;
+}
+
 .CodeMirror-breakpoints {
   width: 1em;
 }

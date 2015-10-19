@@ -10,7 +10,8 @@ class Base {
     private $transaction_id;
     private $breakPoints = [];
     private $activeBreak = NULL;
-    private $activeContexts = [];
+    private $activeStack = [];
+    private $activeContext = ['depth' => null, 'contexts' => []];
 
     const XML_LEN_HEADER = '/\d+<\?xml version="1.0" encoding="iso-8859-1"\?>/';
 
@@ -52,10 +53,12 @@ class Base {
     public function getActiveBreak() {
         return $this->activeBreak;
     }
-    public function getActiveContexts() {
-        return $this->activeContexts;
+    public function getActiveContext() {
+        return $this->activeContext;
     }
-
+    public function getActiveStack() {
+        return $this->activeStack;
+    }
 
     /* Private API */
     function __construct($xdebugConn, $Therac) {

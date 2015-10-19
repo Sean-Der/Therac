@@ -55,13 +55,20 @@ trait Emit {
         $this->newREPLPrompt();
     }
 
-    public function emitActiveContexts() {
-        $this->baseEmit('activeContexts', [$this->Therac->Xdebug->getActiveContexts()]);
+    public function emitActiveContext() {
+        $this->baseEmit('activeContext', [$this->Therac->Xdebug->getActiveContext()]);
     }
 
     public function emitActiveLineSet($line) {
         $this->activeFile['line'] = $line;
         $this->baseEmit('activeLineSet', [$line]);
+    }
+
+    public function emitActiveStack() {
+        $this->baseEmit('activeStack', [ array_map(function($stack) {
+            $stack['file'] = $this->stripFullPath($stack['file']);
+            return $stack;
+        }, $this->Therac->Xdebug->getActiveStack()) ]);
     }
 
     /* Private API */
