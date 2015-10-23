@@ -82,6 +82,7 @@ class Base {
             return "'$value'";
         case 'float':
         case 'int':
+        case 'resource':
             return $value;
         case 'bool':
             return ($value == '0'? 'false':'true');

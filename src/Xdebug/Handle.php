@@ -69,6 +69,7 @@ trait Handle {
 
                 $this->emitRun();
                 $this->Therac->WebSocket->emitBreak(null, null);
+                $this->Therac->WebSocket->emitActiveLineSet(null);
                 $this->Therac->WebSocket->emitActiveContext();
                 $this->Therac->WebSocket->emitActiveStack();
                 $this->closeActiveConn();
@@ -77,7 +78,7 @@ trait Handle {
         case 'eval':
             try {
                 $this->Therac->WebSocket->emitREPLOutput($this->valueResponseToString($msg->children()));
-                $this->emitContextNames();
+                $this->emitContextNames(0);
             } catch (\Exception $e) {
                 $this->Therac->WebSocket->emitREPLError($e->getMessage());
             }
@@ -104,7 +105,7 @@ trait Handle {
                         'value' => $this->valueResponseToString($child),
                     ];
                 } catch (\Exception $e) {
-                    var_dump($e);
+                    echo $e->getMessage();
                 }
             }
             $this->Therac->WebSocket->emitActiveContext();

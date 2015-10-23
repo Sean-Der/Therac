@@ -20,7 +20,11 @@ trait Connection {
                     $data = $this->dataCache . $data;
                     $this->dataCache = '';
                 }
-                if (substr($data, -1) !== '>') {
+
+                if (!$this->endsWith($data, '</init>')      &&
+                    !$this->endsWith($data, '</response>')  &&
+                    !$this->endsWith($data, '</stream>')
+                ) {
                     return $this->dataCache .= $data;
                 }
 
@@ -71,6 +75,8 @@ trait Connection {
             $this->transaction_id = 0;
             $this->activeConn = $conn;
     }
-
+    private function endsWith($haystack, $needle) {
+        return $needle === "" || (($temp = strlen($haystack) - strlen($needle)) >= 0 && strpos($haystack, $needle, $temp) !== FALSE);
+    }
 
 }

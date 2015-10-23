@@ -9,6 +9,9 @@ module.exports = require('backbone').View.extend({
         this.webSocket = args.webSocket;
     },
     setContext: function(context) {
+        if (_.isNull(context.depth)) {
+            this.$el.empty();
+        }
         _.forEach(context.contexts, function(context) {
             var currentNode =  this.$el.find('table[data-context="' + context.name + '"]'),
                 html = ContextTemplate({name: context.name, values: context.values});

@@ -31,9 +31,6 @@ class Base implements MessageComponentInterface {
         $this->emitActiveContext();
         $this->emitActiveStack();
 
-        foreach($this->Therac->Xdebug->getBreakpoints($file) as $breakPoint) {
-            $this->emitBreakpointSet($breakPoint['file'], $breakPoint['line']);
-        }
         foreach ($this->REPLState as $line) {
             $this->baseEmit($line['type'], [$line['data']], [$conn]);
         }
