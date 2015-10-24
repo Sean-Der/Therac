@@ -90,12 +90,14 @@ trait Handle {
                     'name'   => (string) $child['name'],
                     'id'     => (string) $child['id'],
                     'values' => [],
+                    'isset'  => false,
                 ];
                 $this->emitContextGet($child['id']);
             }
             break;
         case 'context_get':
             $contextId = (string) $msg->attributes()['context'];
+            $this->activeContext['contexts'][$contextId]['isset'] = true;
 
             foreach ($msg->children() as $child) {
                 $childAttributes = $child->attributes();
@@ -108,7 +110,14 @@ trait Handle {
                     echo $e->getMessage();
                 }
             }
+
+            foreach ($this->activeContext['contexts'] as $context) {
+                if ($context['isset'] === false) {
+                    break 2;
+                }
+            }
             $this->Therac->WebSocket->emitActiveContext();
+
             break;
         case 'stack_get':
             $this->activeStack = [];
