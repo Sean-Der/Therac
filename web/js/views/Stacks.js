@@ -7,7 +7,7 @@ var StacksTemplate = require('../../templates/Stacks.hbs'),
 
 module.exports = require('backbone').View.extend({
     events: {
-        "click td.jump-to" : "_onJumpTo",
+        "click [data-frame]" : "_onJumpTo",
     },
     _onJumpTo: function(e) {
         var parentEl = e.currentTarget.parentElement;
@@ -23,7 +23,7 @@ module.exports = require('backbone').View.extend({
         this.el.innerHTML = StacksTemplate();
     },
     setStacks: function(stacks) {
-        var tbody = this.$el.find('tbody').empty();
+        var tbody = this.$el.find('[data-call-stack]').empty();
         tbody.empty();
         _.forEach(stacks, function(stack) {
             tbody.append(StackTemplate({

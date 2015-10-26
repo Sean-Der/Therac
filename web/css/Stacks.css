@@ -1,8 +1,10 @@
 #stacks-container {
   height: calc(33% - 7px);
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
-.jump-to {
-  color: green;
+#stacks-container a {
+  color: #489FBB;
+  cursor:pointer;
+  font-size: 12px;
 }

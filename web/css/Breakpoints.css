@@ -1,8 +1,18 @@
 #breakpoints-container {
   height: calc(33% - 7px);
-  overflow: scroll;
+  overflow-y: scroll;
 }
 
-.remove-breakpoint {
+[data-remove-breakpoint] {
   color: red;
+}
+
+a.breakpoint-file {
+  color: #489FBB;
+  cursor:pointer;
+}
+
+.breakpoint {
+  color: 666;
+  font-size: 12px;
 }

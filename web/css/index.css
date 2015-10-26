@@ -29,3 +29,12 @@ body {
   padding-left: 10px;
   font-weight: 400;
 }
+
+.debugger-panel-header h3 {
+  background: #000;
+  color: #FFF;
+  line-height: 20px;
+  font-size: 12px;
+  padding-left: 10px;
+  font-weight: 400;
+}

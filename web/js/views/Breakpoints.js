@@ -6,7 +6,7 @@ var BreakpointsTemplate = require('../../templates/Breakpoints.hbs'),
 
 module.exports = require('backbone').View.extend({
     events: {
-        "click td.remove-breakpoint" : "_onRemoveBreakpoint",
+        "click [data-remove-breakpoint]" : "_onRemoveBreakpoint",
     },
     _onRemoveBreakpoint: function(e) {
         var parentEl = e.currentTarget.parentElement;
@@ -20,8 +20,8 @@ module.exports = require('backbone').View.extend({
         this.el.innerHTML = BreakpointsTemplate();
     },
     setBreakpoint: function(file, line) {
-        if (this.$el.find('tr[data-file="' + file + '"][data-line="' + line + '"]').length === 0) {
-            this.$el.find('tbody').append(BreakpointTemplate({file: file, line: line}));
+        if (this.$el.find('[data-file="' + file + '"][data-line="' + line + '"]').length === 0) {
+            this.$el.find('[data-breakpoints]').append(BreakpointTemplate({file: file, line: line}));
         }
     },
     removeBreakpoint: function(file, line) {

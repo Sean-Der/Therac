@@ -1,8 +1,5 @@
-<tr data-file="{{file}}" data-line="{{line}}">
-  <td>{{file}}</td>
-  <td>{{line}}</td>
-  <td class="remove-breakpoint">
-    <i class="fa fa-ban"></i>
-  </td>
-</tr>
+<div class="breakpoint" data-file="{{file}}" data-line="{{line}}">
+  <i data-remove-breakpoint class="fa fa-ban"></i>
+  <a data-breakpoint class="breakpoint-file"> {{file}}</a>:{{line}}
+</div>
 

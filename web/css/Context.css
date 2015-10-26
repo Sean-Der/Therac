@@ -2,3 +2,12 @@
   height: calc(33% - 7px);
   overflow: scroll;
 }
+
+#context-container .context-name {
+  font-family: monospace;
+  font-size: 12px;
+}
+
+#context-container .context-header h4 {
+  margin:0;
+}
