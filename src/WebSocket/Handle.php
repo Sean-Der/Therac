@@ -39,8 +39,12 @@ trait Handle {
     protected function handleGetDirectoryListing($directory) {
         $this->emitDirectoryListing($this->Therac->BASE_DIRECTORY . $directory);
     }
-    protected function handleSetActiveFile($file, $line) {
-        $this->emitFileContents($this->Therac->BASE_DIRECTORY . $file, $line);
+    protected function handleSetActiveFile($file) {
+        $this->emitFileContents($this->Therac->BASE_DIRECTORY . $file);
     }
+    protected function handleSetActiveLine($line) {
+        $this->emitActiveLineSet($line);
+    }
+
 
 }

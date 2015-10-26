@@ -1,7 +1,7 @@
 @import "../../node_modules/codemirror/lib/codemirror.css";
 
 .CodeMirror-linebreak {
-  background-color: lightblue;
+  background-color: lightblue !important;
 }
 
 .CodeMirror-activeline {

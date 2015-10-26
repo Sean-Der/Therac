@@ -24,12 +24,11 @@ trait Emit {
         $this->baseEmit('directoryListing', [$this->stripFullPath($directory), $scanResult]);
     }
 
-    public function emitFileContents($file, $line) {
+    public function emitFileContents($file) {
         $this->activeFile['file'] = $file;
 
         $relativeDirectory = str_replace($file, "", $this->stripFullPath($file));
         $this->baseEmit('fileContents', [$relativeDirectory, file_get_contents($file)]);
-        $this->emitActiveLineSet($line);
 
         if (($break = $this->Therac->Xdebug->getActiveBreak()) != NULL && $break['file'] === $file) {
             $this->emitBreak($break['file'], $break['line']);
@@ -37,6 +36,7 @@ trait Emit {
         foreach($this->Therac->Xdebug->getBreakpoints($file) as $breakPoint) {
             $this->emitBreakpointSet($breakPoint['file'], $breakPoint['line']);
         }
+        $this->emitActiveLineSet();
     }
 
     public function emitREPLInput($input) {
@@ -59,9 +59,11 @@ trait Emit {
         $this->baseEmit('activeContext', [$this->Therac->Xdebug->getActiveContext()]);
     }
 
-    public function emitActiveLineSet($line) {
-        $this->activeFile['line'] = $line;
-        $this->baseEmit('activeLineSet', [$line]);
+    public function emitActiveLineSet($line = null) {
+        if ($line !== null) {
+            $this->activeFile['line'] = $line;
+        }
+        $this->baseEmit('activeLineSet', [$this->activeFile['line']]);
     }
 
     public function emitActiveStack() {

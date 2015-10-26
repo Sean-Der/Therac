@@ -28,7 +28,7 @@ module.exports = require('backbone').View.extend({
     onOpenFile: function(e) {
         var parent = e.target.parentElement,
             fileName = parent.getAttribute('data-directory') + parent.getAttribute('data-name');
-        this.webSocket.emitSetActiveFile(fileName, 0);
+        this.webSocket.emitSetActiveFile(fileName);
     },
     onOpenDirectory: function(e) {
         var parent = e.target.parentElement,

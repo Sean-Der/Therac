@@ -65,7 +65,17 @@ module.exports = require('backbone').View.extend({
             }
         }, this));
 
-        var panel= document.createElement('div');
+        var lineHeight = this.editor.defaultTextHeight();
+        this.editor.on("scroll", _.bind(function(cm) {
+            if (cm.state.focused === true) {
+                var scrollInfo = cm.getScrollInfo();
+                this.webSocket.emitSetActiveLine(Math.ceil(((scrollInfo.clientHeight / 2) + scrollInfo.top) / lineHeight));
+
+            }
+        }, this));
+
+
+        var panel = document.createElement('div');
         panel.innerHTML = CodeMirrorPanel();
         panel.className = 'CodeMirror-panel';
         this.editor.addPanel(panel, {position: "bottom"});
@@ -93,23 +103,26 @@ module.exports = require('backbone').View.extend({
             }
             this.currentBreak = null;
         } else {
-            var lineNum = parseInt(lineNum) - 1;
+            this.editor.scrollIntoView({line: lineNum, ch: 0});
+            lineNum = parseInt(lineNum) - 1;
             this.currentBreak = lineNum;
             this.editor.addLineClass(lineNum, 'background', this.BREAK_CSS_CLASS);
         }
     },
     setActiveLine: function(lineNum) {
-        this.editor.scrollIntoView({line: lineNum, ch: 0});
-        if (lineNum === null) {
-            if (this.activeLine !== null) {
-                this.editor.removeLineClass(this.activeLine, 'background', this.ACTIVE_CSS_CLASS);
-            }
+        if (this.activeLine !== null) {
+            this.editor.removeLineClass(this.activeLine, 'background', this.ACTIVE_CSS_CLASS);
             this.activeLine = null;
-        } else {
-            var lineNum = parseInt(lineNum) - 1;
-            this.activeLine = lineNum;
-            this.editor.addLineClass(lineNum, 'background', this.ACTIVE_CSS_CLASS);
         }
+
+        if (lineNum === null) {
+            return
+        }
+        this.editor.scrollIntoView({line: lineNum, ch: 0});
+
+        lineNum = parseInt(lineNum) - 1;
+        this.activeLine = lineNum;
+        this.editor.addLineClass(lineNum, 'background', this.ACTIVE_CSS_CLASS);
 
     },
 });

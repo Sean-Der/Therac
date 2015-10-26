@@ -11,7 +11,8 @@ module.exports = require('backbone').View.extend({
     },
     _onJumpTo: function(e) {
         var parentEl = e.currentTarget.parentElement;
-        this.webSocket.emitSetActiveFile(parentEl.getAttribute('data-file'), parentEl.getAttribute('data-line'));
+        this.webSocket.emitSetActiveFile(parentEl.getAttribute('data-file'));
+        this.webSocket.emitSetActiveLine(parentEl.getAttribute('data-line'));
         this.webSocket.emitGetContext(parentEl.getAttribute('data-depth'));
     },
 

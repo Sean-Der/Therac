@@ -49,7 +49,10 @@ module.exports = require('backbone').Model.extend({
     this._emitterBase('stepOut', []);
   },
   emitSetActiveFile: function(file, line) {
-    this._emitterBase('setActiveFile', [file, line]);
+    this._emitterBase('setActiveFile', [file]);
+  },
+  emitSetActiveLine: function(line) {
+    this._emitterBase('setActiveLine', [line]);
   },
   emitGetContext: function(depth) {
     this._emitterBase('getContext', [depth]);

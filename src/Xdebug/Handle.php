@@ -59,7 +59,7 @@ trait Handle {
                     'file' => $file,
                     'line' => $line,
                 ];
-                $this->Therac->WebSocket->emitFileContents($file, $line);
+                $this->Therac->WebSocket->emitFileContents($file);
                 $this->emitStackGet();
                 $this->emitContextNames(0);
             } else if ((string) $attributes['status'] === 'stopping') {

@@ -36,7 +36,7 @@ class Base implements MessageComponentInterface {
         }
 
         if ($this->activeFile['file']) {
-            $this->emitFileContents($this->activeFile['file'], $this->activeFile['line']);
+            $this->emitFileContents($this->activeFile['file']);
         }
     }
 
