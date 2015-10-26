@@ -1,0 +1,4 @@
+#context-container {
+  height: calc(33% - 7px);
+  overflow: scroll;
+}

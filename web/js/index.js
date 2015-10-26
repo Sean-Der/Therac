@@ -7,14 +7,23 @@ var $ = require('jquery'),
 var CodeMirrorView = require('./views/CodeMirror.js'),
     codeMirror = new CodeMirrorView({el: $('#code-mirror-container'), webSocket: webSocket});
 codeMirror.render();
+window.editor = codeMirror;
 
 var REPLView = require('./views/REPL.js'),
     REPL = new REPLView({el: $('#REPL-container'), webSocket: webSocket});
 REPL.render();
 
-var BreakpointsView = require('./views/Breakpoints.js'),
-    breakpoints = new BreakpointsView({el: $('#breakpoints-container'), webSocket: webSocket});
-breakpoints.render();
+
+
+// Right Debugger Panel
+// 1. actions
+// 2. Call Stack
+// 3. Context
+// 4. Breakpoints
+
+var DebugActions = require('./views/DebugActions.js'),
+    debugActions = new DebugActions({el: $('#debug-actions-container'), webSocket: webSocket});
+debugActions.render();
 
 var ContextView = require('./views/Context.js'),
     context = new ContextView({el: $('#context-container'), webSocket: webSocket});
@@ -24,4 +33,10 @@ var StacksView = require('./views/Stacks.js'),
     stacks = new StacksView({el: $('#stacks-container'), webSocket: webSocket});
 stacks.render();
 
+var BreakpointsView = require('./views/Breakpoints.js'),
+    breakpoints = new BreakpointsView({el: $('#breakpoints-container'), webSocket: webSocket});
+breakpoints.render();
+
 webSocket.setViews(codeMirror, REPL, breakpoints, context, stacks);
+window.w = webSocket;
+

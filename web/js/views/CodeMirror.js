@@ -4,9 +4,11 @@ var CodeMirror = require('codemirror'),
     _ = require('lodash'),
     CodeMirrorPanel = require('../../templates/CodeMirrorPanel.hbs'),
     $ = require('jquery');
+
+
 require('codemirror/addon/edit/matchbrackets.js');
 require('codemirror/addon/selection/active-line.js');
-require('codemirror/addon/display/panel.js');
+// require('codemirror/addon/display/panel.js');
 
 require('codemirror/mode/htmlmixed/htmlmixed.js');
 require('codemirror/mode/javascript/javascript.js');
@@ -24,25 +26,6 @@ module.exports = require('backbone').View.extend({
     currentBreak: null,
     activeLine: null,
 
-    events: {
-        "click a.CodeMirror-step-over" : "_onStepOver",
-        "click a.CodeMirror-run" : "_onRun",
-        "click a.CodeMirror-step-into" : "_onStepInto",
-        "click a.CodeMirror-step-out" : "_onStepOut",
-    },
-
-    _onRun: function (){
-        this.webSocket.emitRun();
-    },
-    _onStepOver: function (){
-        this.webSocket.emitStepOver();
-    },
-    _onStepInto: function (){
-        this.webSocket.emitStepInto();
-    },
-    _onStepOut: function (){
-        this.webSocket.emitStepOut();
-    },
 
     initialize: function(args) {
         this.webSocket = args.webSocket;
@@ -74,11 +57,10 @@ module.exports = require('backbone').View.extend({
             }
         }, this));
 
-
-        var panel = document.createElement('div');
-        panel.innerHTML = CodeMirrorPanel();
-        panel.className = 'CodeMirror-panel';
-        this.editor.addPanel(panel, {position: "bottom"});
+        // var panel = document.createElement('div');
+        // panel.innerHTML = CodeMirrorPanel();
+        // panel.className = 'CodeMirror-panel';
+        // this.editor.addPanel(panel, {position: "bottom"});
     },
     setEditorValue: function(file, value) {
         this.activeFile = file;

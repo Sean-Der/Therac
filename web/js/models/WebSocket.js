@@ -60,6 +60,7 @@ module.exports = require('backbone').Model.extend({
   /* Handlers */
   _handleDirectoryListing: function(directory, children) {
   },
+
   _handleFileContents: function(file, fileContents) {
     this.codeMirror.setEditorValue(file, fileContents);
   },

@@ -1,5 +1,6 @@
 #stacks-container {
-  padding-top: 2em;
+  height: calc(33% - 7px);
+  overflow: scroll;
 }
 
 .jump-to {

@@ -1,5 +1,31 @@
 @import "../../node_modules/purecss/build/pure-min.css";
 
+body {
+  height: 100vh;
+}
+
+.pure-g {
+  height: calc(100% - 300px);
+}
+
 #REPL-container {
-  padding-top: 2em;
+  height: 300px;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+}
+
+#debugger-panel {
+  height: 100%;
+  overflow: hidden;
+}
+
+#therac-header h1 {
+  font-size: 12px;
+  color: white;
+  background: black;
+  margin: 0;
+  line-height: 21px;
+  padding-left: 10px;
+  font-weight: 400;
 }
