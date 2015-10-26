@@ -5,7 +5,7 @@
   "main": "web/js/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "watchify -v -t [ hbsfy -t ] -t browserify-css web/js/index.js -o web/public_html/bundle.js",
+    "watch": "watchify --debug -v -t [ hbsfy -t ] -t browserify-css web/js/index.js -o web/public_html/bundle.js",
     "build": "browserify  -t [ hbsfy -t ] -t [ browserify-css --minify=true ] web/js/index.js | uglifyjs -c > web/public_html/bundle.js"
   },
   "repository": {
