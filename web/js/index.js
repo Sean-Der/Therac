@@ -8,10 +8,6 @@ var CodeMirrorView = require('./views/CodeMirror.js'),
     codeMirror = new CodeMirrorView({el: $('#code-mirror-container'), webSocket: webSocket});
 codeMirror.render();
 
-var FileTreeView = require('./views/FileTree.js'),
-    fileTree = new FileTreeView({el: $('#file-tree-container'), webSocket: webSocket});
-fileTree.render();
-
 var REPLView = require('./views/REPL.js'),
     REPL = new REPLView({el: $('#REPL-container'), webSocket: webSocket});
 REPL.render();
@@ -28,4 +24,4 @@ var StacksView = require('./views/Stacks.js'),
     stacks = new StacksView({el: $('#stacks-container'), webSocket: webSocket});
 stacks.render();
 
-webSocket.setViews(fileTree, codeMirror, REPL, breakpoints, context, stacks);
+webSocket.setViews(codeMirror, REPL, breakpoints, context, stacks);

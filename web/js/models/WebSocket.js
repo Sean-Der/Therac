@@ -13,8 +13,7 @@ module.exports = require('backbone').Model.extend({
   },
 
   /* Public API */
-  setViews: function(fileTree, codeMirror, REPL, breakpoints, context, stacks) {
-    this.fileTree = fileTree;
+  setViews: function(codeMirror, REPL, breakpoints, context, stacks) {
     this.codeMirror = codeMirror;
     this.REPL = REPL;
     this.breakpoints = breakpoints;
@@ -60,7 +59,6 @@ module.exports = require('backbone').Model.extend({
 
   /* Handlers */
   _handleDirectoryListing: function(directory, children) {
-    this.fileTree.renderDirectory(directory, children);
   },
   _handleFileContents: function(file, fileContents) {
     this.codeMirror.setEditorValue(file, fileContents);
