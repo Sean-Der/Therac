@@ -13,18 +13,19 @@ module.exports = require('backbone').Model.extend({
   },
 
   /* Public API */
-  setViews: function(codeMirror, REPL, breakpoints, context, stacks) {
+  setViews: function(codeMirror, REPL, breakpoints, context, stacks, fileSearch) {
     this.codeMirror = codeMirror;
     this.REPL = REPL;
     this.breakpoints = breakpoints;
     this.context = context;
     this.stacks = stacks;
+    this.fileSearch = fileSearch;
 
     this.viewsSet.resolve();
   },
 
-  emitGetDirectoryListing: function(directory) {
-    this._emitterBase('getDirectoryListing', [directory]);
+  emitFileSearch: function(search, isOpen) {
+    this._emitterBase('fileSearch', [search, isOpen]);
   },
   emitSetBreakpoint: function(file, line) {
     this._emitterBase('setBreakpoint', [file, line]);
@@ -58,9 +59,9 @@ module.exports = require('backbone').Model.extend({
   },
 
   /* Handlers */
-  _handleDirectoryListing: function(directory, children) {
+  _handleActiveFileSearch: function(search, isOpen, results) {
+    this.fileSearch.setSearch(search, isOpen, results);
   },
-
   _handleFileContents: function(file, fileContents) {
     this.codeMirror.setEditorValue(file, fileContents);
   },

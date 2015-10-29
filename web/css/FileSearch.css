@@ -1,0 +1,17 @@
+#file-search-container {
+  position: fixed;
+  top: 2em;
+  width: 90%;
+  padding-left: 5%;
+  z-index: 100;
+}
+
+#file-search-inner {
+  border-radius: 25px;
+  background: gray;
+  padding: 20px;
+}
+
+#file-search-input {
+  width: 100%
+}

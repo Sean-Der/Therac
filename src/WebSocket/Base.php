@@ -11,6 +11,7 @@ class Base implements MessageComponentInterface {
     protected $Therac;
 
     private $activeFile = ['file' => null, 'line' => 0];
+    private $activeSearch = ['isOpen' => false, 'search' => '', 'results' => []];
 
     const REPLInput = 'REPLInput', REPLOutput = 'REPLOutput', REPLError = 'REPLError', REPLStdout = 'REPLStdout';
     const REPLPrompt = 'therac> ';
@@ -27,9 +28,9 @@ class Base implements MessageComponentInterface {
     public function onOpen(ConnectionInterface $conn) {
         $this->clients->attach($conn);
 
-        $this->emitDirectoryListing($this->Therac->BASE_DIRECTORY);
         $this->emitActiveContext();
         $this->emitActiveStack();
+        $this->emitActiveFileSearch();
 
         foreach ($this->REPLState as $line) {
             $this->baseEmit($line['type'], [$line['data']], [$conn]);
@@ -66,9 +67,5 @@ class Base implements MessageComponentInterface {
     public function onError(ConnectionInterface $conn, \Exception $e) {
         echo "An error has occurred: {$e->getMessage()}\n";
         $conn->close();
-    }
-
-    public function stripFullPath($file) {
-        return str_replace($this->Therac->BASE_DIRECTORY, "", $file);
     }
 }

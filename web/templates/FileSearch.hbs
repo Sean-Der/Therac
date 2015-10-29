@@ -1,0 +1,7 @@
+<div id="file-search-inner" {{#unless isOpen}} style="display: none" {{/unless}} >
+  <input type="text" id="file-search-input" value="{{search}}">
+  {{#each results}}
+    <div class="file-search-result"> {{this}} </div>
+  {{/each}}
+</div>
+

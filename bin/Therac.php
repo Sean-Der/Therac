@@ -5,8 +5,8 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 use Therac\Main\Therac;
 
 
-$options = getopt("x::w::b::h", [
-  "base-directory",
+$options = getopt("x::w::s::h", [
+  "search-directories",
   "xdebug-port::",
   "websocket-port::",
   "help"
@@ -16,8 +16,8 @@ if (isset($options['help']) || isset($options['h'])) {
   echo "-h, --help
     Display this help and exit
 
--b, --base-directory
-    Base directory to serve file tree from
+-s, --search-directories
+    Directories that are searchable via the file finder
 
 -x, --xdebug-port
     Port to listen for incoming Xdebug connnections, defaults to 9089
@@ -41,12 +41,15 @@ if (isset($options['websocket-port'])) {
   $websocketPort = $options['w'];
 }
 
-$baseDirectory = '/var/www/data';
-if (isset($options['base-directory'])) {
-  $baseDirectory = $options['base-directory'];
-} else if (isset($options['b'])) {
-  $baseDirectory = $options['b'];
+$searchDirectories = ['/var/www/data'];
+if (isset($options['search-directories'])) {
+  $searchDirectories = $options['search-directories'];
+} else if (isset($options['s'])) {
+  $searchDirectories = $options['s'];
 }
 
+if (!is_array($searchDirectories)) {
+  $searchDirectories = [$searchDirectories];
+}
 
-new Therac($xdebugPort, $websocketPort, $baseDirectory);
+new Therac($xdebugPort, $websocketPort, $searchDirectories);

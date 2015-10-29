@@ -15,11 +15,11 @@ trait Handle {
         $this->Therac->Xdebug->emitStepOut();
     }
     protected function handleSetBreakpoint($file, $line) {
-        $this->Therac->Xdebug->setBreakpoint($this->Therac->BASE_DIRECTORY . $file, $line);
+        $this->Therac->Xdebug->setBreakpoint($file, $line);
         $this->emitBreakpointSet($file, $line);
     }
     protected function handleRemoveBreakpoint($file, $line) {
-        $this->Therac->Xdebug->removeBreakpoint($this->Therac->BASE_DIRECTORY . $file, $line);
+        $this->Therac->Xdebug->removeBreakpoint($file, $line);
         $this->emitBreakpointRemove($file, $line);
     }
     protected function handleREPLInput($input) {
@@ -36,11 +36,36 @@ trait Handle {
     }
 
     //TODO -- make sure these don't escape the project root
-    protected function handleGetDirectoryListing($directory) {
-        $this->emitDirectoryListing($this->Therac->BASE_DIRECTORY . $directory);
+    protected function handleFileSearch($search, $isOpen) {
+        $this->activeSearch['results'] = [];
+        $this->activeSearch['isOpen'] = $isOpen;
+        $this->activeSearch['search'] = $search;
+
+
+        if ($this->activeSearch['isOpen']) {
+            $recursiveDirSearch = function() {
+                $dirStack = $this->Therac->SEARCH_DIRECTORIES;
+                while ($dir = array_shift($dirStack)) {
+                    $subDirs = glob($dir . '/*', GLOB_ONLYDIR | GLOB_NOSORT);
+                    if($subDirs) {
+                        $dirStack = array_merge($dirStack, $subDirs);
+                    }
+                    yield $dir;
+                }
+            };
+            foreach ($recursiveDirSearch() as $dir) {
+                $this->activeSearch['results'] = array_merge(glob($dir . '/' . $this->activeSearch['search'] . '*', GLOB_NOSORT), $this->activeSearch['results']);
+                if (count($this->activeSearch['results']) >= 25) {
+                    break;
+                }
+            }
+        }
+
+        $this->emitActiveFileSearch();
     }
+
     protected function handleSetActiveFile($file) {
-        $this->emitFileContents($this->Therac->BASE_DIRECTORY . $file);
+        $this->emitFileContents($file);
     }
     protected function handleSetActiveLine($line) {
         $this->emitActiveLineSet($line);

@@ -4,31 +4,18 @@ namespace Therac\WebSocket;
 trait Emit {
     /* Public API */
     public function emitBreakpointSet($file, $line) {
-        $this->baseEmit('breakPointSet', [$this->stripFullPath($file), $line]);
+        $this->baseEmit('breakPointSet', [$file, $line]);
     }
     public function emitBreakpointRemove($file, $line) {
-        $this->baseEmit('breakPointRemove', [$this->stripFullPath($file), $line]);
+        $this->baseEmit('breakPointRemove', [$file, $line]);
     }
     public function emitBreak($file, $line) {
-        $this->baseEmit('break', [$this->stripFullPath($file), $line]);
-    }
-
-    public function emitDirectoryListing($directory) {
-        $scanResult = [];
-        foreach(array_diff(scandir($directory), array('..', '.')) as $file) {
-            $scanResult[] = [
-                'name' => $file,
-                'isDir' => is_dir("$directory/$file"),
-            ];
-        }
-        $this->baseEmit('directoryListing', [$this->stripFullPath($directory), $scanResult]);
+        $this->baseEmit('break', [$file, $line]);
     }
 
     public function emitFileContents($file) {
         $this->activeFile['file'] = $file;
-
-        $relativeDirectory = str_replace($file, "", $this->stripFullPath($file));
-        $this->baseEmit('fileContents', [$relativeDirectory, file_get_contents($file)]);
+        $this->baseEmit('fileContents', [$file, file_get_contents($file)]);
 
         if (($break = $this->Therac->Xdebug->getActiveBreak()) != NULL && $break['file'] === $file) {
             $this->emitBreak($break['file'], $break['line']);
@@ -67,10 +54,11 @@ trait Emit {
     }
 
     public function emitActiveStack() {
-        $this->baseEmit('activeStack', [ array_map(function($stack) {
-            $stack['file'] = $this->stripFullPath($stack['file']);
-            return $stack;
-        }, $this->Therac->Xdebug->getActiveStack()) ]);
+        $this->baseEmit('activeStack', [$this->Therac->Xdebug->getActiveStack()]);
+    }
+
+    public function emitActiveFileSearch() {
+        $this->baseEmit('activeFileSearch', [$this->activeSearch['search'], $this->activeSearch['isOpen'], $this->activeSearch['results']]);
     }
 
     /* Private API */

@@ -16,11 +16,11 @@ class Therac {
   public $Xdebug;
 
   public $XDEBUG_PORT;
-  public $BASE_DIRECTORY;
+  public $SEARCH_DIRECTORIES;
 
-  function __construct($xdebugPort, $websocketPort, $baseDirectory) {
+  function __construct($xdebugPort, $websocketPort, $searchDirectories) {
     $this->XDEBUG_PORT = $xdebugPort;
-    $this->BASE_DIRECTORY = $baseDirectory;
+    $this->SEARCH_DIRECTORIES = $searchDirectories;
 
     $loop = Factory::create();
 

@@ -2,7 +2,8 @@ require('../css/index.css');
 document.body.innerHTML = require('../templates/index.hbs')();
 
 var $ = require('jquery'),
-    webSocket = new (require('./models/WebSocket.js'));
+    webSocket = new (require('./models/WebSocket.js')),
+    _ = require('lodash');
 
 var CodeMirrorView = require('./views/CodeMirror.js'),
     codeMirror = new CodeMirrorView({el: $('#code-mirror-container'), webSocket: webSocket});
@@ -37,6 +38,9 @@ var BreakpointsView = require('./views/Breakpoints.js'),
     breakpoints = new BreakpointsView({el: $('#breakpoints-container'), webSocket: webSocket});
 breakpoints.render();
 
-webSocket.setViews(codeMirror, REPL, breakpoints, context, stacks);
-window.w = webSocket;
+var FileSearchView = require('./views/FileSearch.js'),
+    fileSearch = new FileSearchView({el: $('#file-search-container'), webSocket: webSocket});
+$(document).keydown(_.bind(fileSearch.handleOpen, fileSearch));
 
+webSocket.setViews(codeMirror, REPL, breakpoints, context, stacks, fileSearch);
+window.w = webSocket;

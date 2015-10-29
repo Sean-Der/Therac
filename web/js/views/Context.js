@@ -15,7 +15,7 @@ module.exports = require('backbone').View.extend({
     setContext: function(context) {
         var $contexts = this.$el.find('[data-contexts]');
         if (_.isNull(context.depth)) {
-            this.$contexts.empty();
+            $contexts.empty();
         }
         _.forEach(context.contexts, function(context) {
             var currentNode =  $contexts.find('[data-context="' + context.name + '"]'),
