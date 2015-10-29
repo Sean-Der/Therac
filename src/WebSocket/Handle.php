@@ -54,7 +54,7 @@ trait Handle {
                 }
             };
             foreach ($recursiveDirSearch() as $dir) {
-                $this->activeSearch['results'] = array_merge(glob($dir . '/' . $this->activeSearch['search'] . '*', GLOB_NOSORT), $this->activeSearch['results']);
+                $this->activeSearch['results'] = array_merge(glob($dir . '/' . $this->activeSearch['search'] . '*.php', GLOB_NOSORT), $this->activeSearch['results']);
                 if (count($this->activeSearch['results']) >= 25) {
                     break;
                 }
