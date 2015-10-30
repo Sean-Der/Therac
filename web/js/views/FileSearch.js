@@ -21,6 +21,7 @@ module.exports = require('backbone').View.extend({
     _onResultClick: function(e) {
         this.webSocket.emitFileSearch('', false);
         this.webSocket.emitSetActiveFile(e.target.innerText);
+        this.webSocket.emitSetActiveLine(1);
     },
 
     setSearch: function(search, isOpen, results) {
