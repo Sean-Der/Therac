@@ -1,0 +1,14 @@
+#find-file-container {
+  float: right;
+  padding-right: 5em;
+}
+
+#header-container h1 {
+  font-size: 12px;
+  color: white;
+  background: black;
+  margin: 0;
+  line-height: 21px;
+  padding-left: 10px;
+  font-weight: 400;
+}

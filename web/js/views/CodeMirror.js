@@ -8,7 +8,6 @@ var CodeMirror = require('codemirror'),
 
 require('codemirror/addon/edit/matchbrackets.js');
 require('codemirror/addon/selection/active-line.js');
-// require('codemirror/addon/display/panel.js');
 
 require('codemirror/mode/htmlmixed/htmlmixed.js');
 require('codemirror/mode/javascript/javascript.js');
@@ -37,7 +36,8 @@ module.exports = require('backbone').View.extend({
             matchBrackets: true,
             readOnly: true,
             showCursorWhenSelecting: false,
-            gutters: ["CodeMirror-linenumbers", "CodeMirror-breakpoints"]
+            gutters: ["CodeMirror-linenumbers", "CodeMirror-breakpoints"],
+            viewportMargin: Infinity,
         });
 
         this.editor.on("gutterClick", _.bind(function(cm, n) {
@@ -57,10 +57,9 @@ module.exports = require('backbone').View.extend({
             }
         }, this));
 
-        // var panel = document.createElement('div');
-        // panel.innerHTML = CodeMirrorPanel();
-        // panel.className = 'CodeMirror-panel';
-        // this.editor.addPanel(panel, {position: "bottom"});
+        this.onWindowResize();
+        $(window).resize(_.bind(this.onWindowResize, this));
+
     },
     setEditorValue: function(file, value) {
         this.activeFile = file;
@@ -106,5 +105,10 @@ module.exports = require('backbone').View.extend({
         this.activeLine = lineNum;
         this.editor.addLineClass(lineNum, 'background', this.ACTIVE_CSS_CLASS);
 
+    },
+    onWindowResize: function() {
+        var parent = this.$el.parent()
+        this.editor.setSize(this.$el.width() - 10, (parent.height() - parent.children().first().height()) - 10);
+        this.editor.refresh();
     },
 });

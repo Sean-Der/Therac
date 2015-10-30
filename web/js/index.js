@@ -5,6 +5,11 @@ var $ = require('jquery'),
     webSocket = new (require('./models/WebSocket.js')),
     _ = require('lodash');
 
+
+var HeaderView = require('./views/Header.js'),
+    header = new HeaderView({el: $('#header-container'), webSocket: webSocket});
+header.render();
+
 var CodeMirrorView = require('./views/CodeMirror.js'),
     codeMirror = new CodeMirrorView({el: $('#code-mirror-container'), webSocket: webSocket});
 codeMirror.render();
@@ -13,8 +18,6 @@ window.editor = codeMirror;
 var REPLView = require('./views/REPL.js'),
     REPL = new REPLView({el: $('#REPL-container'), webSocket: webSocket});
 REPL.render();
-
-
 
 // Right Debugger Panel
 // 1. actions
@@ -40,7 +43,6 @@ breakpoints.render();
 
 var FileSearchView = require('./views/FileSearch.js'),
     fileSearch = new FileSearchView({el: $('#file-search-container'), webSocket: webSocket});
-$(document).keydown(_.bind(fileSearch.handleOpen, fileSearch));
 
 webSocket.setViews(codeMirror, REPL, breakpoints, context, stacks, fileSearch);
 window.w = webSocket;

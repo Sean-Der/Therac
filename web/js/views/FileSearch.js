@@ -1,13 +1,15 @@
 require('../../css/FileSearch.css');
 
 var FileSearchTemplate = require('../../templates/FileSearch.hbs'),
-    _               = require('lodash');
+    _               = require('lodash'),
+    $               = require('jquery');
 
 
 module.exports = require('backbone').View.extend({
     isOpen: null,
     initialize: function(args) {
         this.webSocket = args.webSocket;
+        $(document).keydown(_.bind(this.handleOpen, this));
     },
     events: {
         "keypress #file-search-input" : "_onFileSearch",

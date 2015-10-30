@@ -8,26 +8,10 @@ body {
   height: calc(100% - 300px);
 }
 
-#REPL-container {
-  height: 300px;
-  width: 100%;
-  position: fixed;
-  bottom: 0;
-}
 
 #debugger-panel {
   height: 100%;
   overflow: hidden;
-}
-
-#therac-header h1 {
-  font-size: 12px;
-  color: white;
-  background: black;
-  margin: 0;
-  line-height: 21px;
-  padding-left: 10px;
-  font-weight: 400;
 }
 
 .debugger-panel-header h3 {

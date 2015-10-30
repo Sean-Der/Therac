@@ -2,3 +2,10 @@
   float: none;
   width: 100%;
 }
+
+#REPL-container {
+  height: 300px;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+}

@@ -16,13 +16,6 @@
   color: blue;
 }
 
-.CodeMirror-scroll {
-  height: auto;
-  overflow-y: hidden;
-  overflow-x: auto;
-}
-
 .CodeMirror {
   border: 1px solid #eee;
-  height: auto;
 }
