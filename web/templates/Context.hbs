@@ -4,6 +4,7 @@
   <h4 class="context-header"> {{name}} </h4>
   {{#each values}}
     <div class="context-name" data-context-name="{{this.name}}">
+      <div class="context-value">{{this.value}}</div>
       {{this.name}}
     </div>
   {{/each}}

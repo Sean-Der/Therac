@@ -6,8 +6,21 @@
 #context-container .context-name {
   font-family: monospace;
   font-size: 12px;
+  position: relative;
+}
+
+#context-container .context-value {
+  position: absolute;
+  z-index: 1;
+  background: white;
+  width: 100%;
+  display: none;
+}
+
+#context-container .context-name:hover .context-value {
+  display: block;
 }
 
 #context-container .context-header h4 {
-  margin:0;
+  margin: 0;
 }
