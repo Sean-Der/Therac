@@ -8,17 +8,13 @@
   font-size: 12px;
   position: relative;
 }
-
-#context-container .context-value {
-  position: absolute;
-  z-index: 1;
-  background: white;
-  width: 100%;
-  display: none;
+#context-container .context-name .bold {
+  font-weight: bold;
 }
 
-#context-container .context-name:hover .context-value {
-  display: block;
+#context-container .context-name .context-value {
+  display: none;
+  margin-bottom: 1em;
 }
 
 #context-container .context-header h4 {
