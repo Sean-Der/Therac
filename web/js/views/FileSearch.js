@@ -14,6 +14,7 @@ module.exports = require('backbone').View.extend({
     events: {
         "keypress #file-search-input" : "_onFileSearch",
         "click .file-search-result" : "_onResultClick",
+        "click #file-search-close" : "_onCloseClick",
     },
     _onFileSearch: function(e) {
         this.webSocket.emitFileSearch(e.target.value + String.fromCharCode(e.keyCode), true);
@@ -22,6 +23,9 @@ module.exports = require('backbone').View.extend({
         this.webSocket.emitFileSearch('', false);
         this.webSocket.emitSetActiveFile(e.target.innerText);
         this.webSocket.emitSetActiveLine(1);
+    },
+    _onCloseClick: function() {
+        this.webSocket.emitFileSearch('', false);
     },
 
     setSearch: function(search, isOpen, results) {

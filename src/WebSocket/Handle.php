@@ -41,20 +41,31 @@ trait Handle {
         $this->activeSearch['isOpen'] = $isOpen;
         $this->activeSearch['search'] = $search;
 
+        $explodedSearch = explode('/', $this->activeSearch['search']);
+        $searchFile = array_pop($explodedSearch);
+        $searchDirectory = array_pop($explodedSearch);
+        if ($searchDirectory !== null) {
+            $searchDirectory = '/' . $searchDirectory;
+        }
 
         if ($this->activeSearch['isOpen']) {
-            $recursiveDirSearch = function() {
+            $recursiveDirSearch = function() use ($searchDirectory) {
                 $dirStack = $this->Therac->SEARCH_DIRECTORIES;
                 while ($dir = array_shift($dirStack)) {
                     $subDirs = glob($dir . '/*', GLOB_ONLYDIR | GLOB_NOSORT);
                     if($subDirs) {
                         $dirStack = array_merge($dirStack, $subDirs);
                     }
+
+                    if ($searchDirectory !== null && substr_compare($dir, $searchDirectory, -strlen($searchDirectory)) !== 0) {
+                        continue;
+                    }
+
                     yield $dir;
                 }
             };
             foreach ($recursiveDirSearch() as $dir) {
-                $this->activeSearch['results'] = array_merge(glob($dir . '/' . $this->activeSearch['search'] . '*.php', GLOB_NOSORT), $this->activeSearch['results']);
+                $this->activeSearch['results'] = array_merge(glob($dir . '/' . $searchFile . '*.php', GLOB_NOSORT), $this->activeSearch['results']);
                 if (count($this->activeSearch['results']) >= 25) {
                     break;
                 }

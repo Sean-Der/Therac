@@ -10,8 +10,13 @@
   border-radius: 25px;
   background: gray;
   padding: 20px;
+  padding-top: 5px;
 }
 
 #file-search-input {
   width: 100%
+}
+
+#file-search-close {
+  padding-bottom: 10px;
 }
