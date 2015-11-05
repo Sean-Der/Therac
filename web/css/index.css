@@ -5,7 +5,7 @@ body {
 }
 
 .pure-g {
-  height: calc(100% - 300px);
+  height: calc(100% - 300px - 1em);
 }
 
 
