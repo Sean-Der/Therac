@@ -59,8 +59,11 @@ module.exports = require('backbone').Model.extend({
   },
 
   /* Handlers */
-  _handleActiveFileSearch: function(search, isOpen, results) {
-    this.fileSearch.setSearch(search, isOpen, results);
+  _handleUniqID: function(uniqID) {
+    this.uniqID = uniqID;
+  },
+  _handleActiveFileSearch: function(search, isOpen, results, uniqID) {
+    this.fileSearch.setSearch(search, isOpen, results, uniqID);
   },
   _handleFileContents: function(file, fileContents) {
     this.codeMirror.setEditorValue(file, fileContents);

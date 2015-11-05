@@ -2,7 +2,6 @@ require('../../css/CodeMirror.css');
 
 var CodeMirror = require('codemirror'),
     _ = require('lodash'),
-    CodeMirrorPanel = require('../../templates/CodeMirrorPanel.hbs'),
     $ = require('jquery');
 
 
@@ -67,7 +66,7 @@ module.exports = require('backbone').View.extend({
     },
     setBreakpoint: function(file, lineNum) {
         if (file !== this.activeFile) {
-            return
+            return;
         }
         var marker = document.createElement("div");
         marker.style.color = "red";
@@ -97,7 +96,7 @@ module.exports = require('backbone').View.extend({
         }
 
         if (lineNum === null) {
-            return
+            return;
         }
         this.editor.scrollIntoView({line: lineNum, ch: 0});
 
@@ -107,7 +106,7 @@ module.exports = require('backbone').View.extend({
 
     },
     onWindowResize: function() {
-        var parent = this.$el.parent()
+        var parent = this.$el.parent();
         this.editor.setSize(this.$el.width() - 10, (parent.height() - parent.children().first().height()) - 10);
         this.editor.refresh();
     },

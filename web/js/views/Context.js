@@ -20,11 +20,11 @@ module.exports = require('backbone').View.extend({
     _onEnterValue: function(e) {
         var parent = $(e.currentTarget).parent();
 
-        $(e.currentTarget).addClass('bold')
+        $(e.currentTarget).addClass('bold');
         parent.find('.context-value').slideDown();
     },
     _onLeaveValue: function(e) {
-        $(e.currentTarget).find('span').removeClass('bold')
+        $(e.currentTarget).find('span').removeClass('bold');
         $(e.currentTarget).find('.context-value').slideUp();
     },
 

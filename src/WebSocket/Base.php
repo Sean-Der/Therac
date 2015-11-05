@@ -11,7 +11,7 @@ class Base implements MessageComponentInterface {
     protected $Therac;
 
     private $activeFile = ['file' => null, 'line' => 0];
-    private $activeSearch = ['isOpen' => false, 'search' => '', 'results' => []];
+    private $activeSearch = ['isOpen' => false, 'search' => '', 'results' => [], 'uniqID' => ''];
 
     const REPLInput = 'REPLInput', REPLOutput = 'REPLOutput', REPLError = 'REPLError', REPLStdout = 'REPLStdout';
     const REPLPrompt = 'therac> ';
@@ -27,10 +27,12 @@ class Base implements MessageComponentInterface {
 
     public function onOpen(ConnectionInterface $conn) {
         $this->clients->attach($conn);
+        $conn->uniqID = uniqid();
 
         $this->emitActiveContext();
         $this->emitActiveStack();
         $this->emitActiveFileSearch();
+        $this->emitUniqID($conn);
 
         foreach ($this->REPLState as $line) {
             $this->baseEmit($line['type'], [$line['data']], [$conn]);
@@ -46,6 +48,7 @@ class Base implements MessageComponentInterface {
         if (isset($msg) && is_array($msg) && isset($msg['event']) && isset($msg['data'])) {
             try {
                 $method = new \ReflectionMethod(__CLASS__, 'handle' . $msg['event']);
+                array_unshift($msg['data'], $from);
                 if ($method->getNumberOfParameters() === count($msg['data'])) {
                     $method->setAccessible(true);
                     $method->invokeArgs($this, $msg['data']);

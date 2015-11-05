@@ -2,27 +2,27 @@
 namespace Therac\WebSocket;
 
 trait Handle {
-    protected function handleRun() {
+    protected function handleRun($conn) {
         $this->Therac->Xdebug->emitRun();
     }
-    protected function handleStepOver() {
+    protected function handleStepOver($conn) {
         $this->Therac->Xdebug->emitStepOver();
     }
-    protected function handleStepInto() {
+    protected function handleStepInto($conn) {
         $this->Therac->Xdebug->emitStepInto();
     }
-    protected function handleStepOut() {
+    protected function handleStepOut($conn) {
         $this->Therac->Xdebug->emitStepOut();
     }
-    protected function handleSetBreakpoint($file, $line) {
+    protected function handleSetBreakpoint($conn, $file, $line) {
         $this->Therac->Xdebug->setBreakpoint($file, $line);
         $this->emitBreakpointSet($file, $line);
     }
-    protected function handleRemoveBreakpoint($file, $line) {
+    protected function handleRemoveBreakpoint($conn, $file, $line) {
         $this->Therac->Xdebug->removeBreakpoint($file, $line);
         $this->emitBreakpointRemove($file, $line);
     }
-    protected function handleREPLInput($input) {
+    protected function handleREPLInput($conn, $input) {
         if ($input === "\r") {
             $currentREPLInput = str_replace(self::REPLPrompt, "", end($this->REPLState)['data']);
             $this->Therac->Xdebug->emitEvalAtBreakpoint($currentREPLInput);
@@ -31,15 +31,17 @@ trait Handle {
             $this->emitREPLInput($input);
         }
     }
-    protected function handleGetContext($depth) {
+    protected function handleGetContext($conn, $depth) {
         $this->Therac->Xdebug->emitContextNames($depth);
     }
 
     //TODO -- make sure these don't escape the project root
-    protected function handleFileSearch($search, $isOpen) {
+    protected function handleFileSearch($conn, $search, $isOpen) {
         $this->activeSearch['results'] = [];
         $this->activeSearch['isOpen'] = $isOpen;
         $this->activeSearch['search'] = $search;
+        $this->activeSearch['uniqID'] = $conn->uniqID;
+
 
         $explodedSearch = explode('/', $this->activeSearch['search']);
         $searchFile = array_pop($explodedSearch);
@@ -67,6 +69,7 @@ trait Handle {
             foreach ($recursiveDirSearch() as $dir) {
                 $this->activeSearch['results'] = array_merge(glob($dir . '/' . $searchFile . '*.php', GLOB_NOSORT), $this->activeSearch['results']);
                 if (count($this->activeSearch['results']) >= 25) {
+                    $this->activeSearch['results'] = array_slice($this->activeSearch['results'], 0, 25);
                     break;
                 }
             }
@@ -75,10 +78,10 @@ trait Handle {
         $this->emitActiveFileSearch();
     }
 
-    protected function handleSetActiveFile($file) {
+    protected function handleSetActiveFile($conn, $file) {
         $this->emitFileContents($file);
     }
-    protected function handleSetActiveLine($line) {
+    protected function handleSetActiveLine($conn, $line) {
         $this->emitActiveLineSet($line);
     }
 

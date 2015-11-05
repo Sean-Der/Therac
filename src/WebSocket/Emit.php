@@ -58,7 +58,11 @@ trait Emit {
     }
 
     public function emitActiveFileSearch() {
-        $this->baseEmit('activeFileSearch', [$this->activeSearch['search'], $this->activeSearch['isOpen'], $this->activeSearch['results']]);
+        $this->baseEmit('activeFileSearch', [$this->activeSearch['search'], $this->activeSearch['isOpen'], $this->activeSearch['results'], $this->activeSearch['uniqID']]);
+    }
+
+    public function emitUniqID($conn) {
+        $this->baseEmit('uniqID', [$conn->uniqID], [$conn]);
     }
 
     /* Private API */

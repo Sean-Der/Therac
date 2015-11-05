@@ -7,6 +7,7 @@ var FileSearchTemplate = require('../../templates/FileSearch.hbs'),
 
 module.exports = require('backbone').View.extend({
     isOpen: null,
+    firstSet: true,
     initialize: function(args) {
         this.webSocket = args.webSocket;
         $(document).keydown(_.bind(this.handleOpen, this));
@@ -28,9 +29,17 @@ module.exports = require('backbone').View.extend({
         this.webSocket.emitFileSearch('', false);
     },
 
-    setSearch: function(search, isOpen, results) {
+    setSearch: function(search, isOpen, results, uniqID) {
+        if (!this.firstSet &&
+            isOpen === this.isOpen &&
+            uniqID === this.webSocket.uniqID
+            && this.$el.find('input').val() !== search) {
+               return;
+        }
+
         this.isOpen = isOpen;
         this.el.innerHTML = FileSearchTemplate({search: search, isOpen: isOpen, results: results});
+        this.firstSet = false;
 
         var input = this.$el.find('#file-search-input'),
             val = input.val();
