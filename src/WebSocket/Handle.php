@@ -54,11 +54,14 @@ trait Handle {
             $recursiveDirSearch = function() use ($searchDirectory) {
                 $dirStack = $this->Therac->SEARCH_DIRECTORIES;
                 while ($dir = array_shift($dirStack)) {
+                    if (in_array($dir, $this->Therac->EXCLUDED_DIRECTORIES)) {
+                        continue;
+                    }
+
                     $subDirs = glob($dir . '/*', GLOB_ONLYDIR | GLOB_NOSORT);
                     if($subDirs) {
                         $dirStack = array_merge($dirStack, $subDirs);
                     }
-
                     if ($searchDirectory !== null && substr_compare($dir, $searchDirectory, -strlen($searchDirectory)) !== 0) {
                         continue;
                     }

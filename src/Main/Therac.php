@@ -17,10 +17,12 @@ class Therac {
 
   public $XDEBUG_PORT;
   public $SEARCH_DIRECTORIES;
+  public $EXCLUDED_DIRECTORIES;
 
-  function __construct($xdebugPort, $websocketPort, $searchDirectories) {
+  function __construct($xdebugPort, $websocketPort, $searchDirectories, $excludedDirectories) {
     $this->XDEBUG_PORT = $xdebugPort;
     $this->SEARCH_DIRECTORIES = $searchDirectories;
+    $this->EXCLUDED_DIRECTORIES = $excludedDirectories;
 
     $loop = Factory::create();
 
