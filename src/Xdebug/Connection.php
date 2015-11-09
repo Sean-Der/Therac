@@ -40,9 +40,6 @@ trait Connection {
                     switch ($event) {
                     case 'init':
                         $this->handleInit($xml);
-                        if (isset($this->activeConn)) {
-                            $this->emitRun();
-                        }
                         break;
                     case 'response':
                         $this->handleResponse($xml);

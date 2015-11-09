@@ -37,12 +37,11 @@ trait Handle {
     protected function handleInit($msg) {
         $this->emitStdout();
 
-        if (empty($this->breakPoints)) {
-            return $this->closeActiveConn();
-        }
         foreach ($this->breakPoints as $breakPoint) {
             $this->emitBreakpointSet($breakPoint['file'], $breakPoint['line']);
         }
+
+        $this->emitRun();
     }
 
     protected function handleResponse($msg) {
