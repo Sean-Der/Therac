@@ -97,6 +97,10 @@ trait Emit {
         }
 
         $this->REPLState[] = $newLine;
+        if (count($this->REPLState) > 250) {
+            array_shift($this->REPLState);
+        }
+
         $this->baseEmit($type, [$data]);
     }
 
