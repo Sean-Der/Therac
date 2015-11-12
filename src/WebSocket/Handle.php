@@ -34,6 +34,11 @@ trait Handle {
     protected function handleGetContext($conn, $depth) {
         $this->Therac->Xdebug->emitContextNames($depth);
     }
+    protected function handleSetBreakOnException($conn, $enabled) {
+        $this->Therac->Xdebug->setBreakOnException($enabled);
+        $this->emitBreakOnExceptionSet();
+    }
+
 
     //TODO -- make sure these don't escape the project root
     protected function handleFileSearch($conn, $search, $isOpen) {

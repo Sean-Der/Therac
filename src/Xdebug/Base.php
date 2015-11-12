@@ -12,6 +12,7 @@ class Base {
     private $activeBreak = NULL;
     private $activeStack = [];
     private $activeContext = ['depth' => null, 'contexts' => []];
+    private $breakOnException = ['transactionId' => 0, 'id' => 0, 'enabled' => false];
 
     const XML_LEN_HEADER = '/\d+<\?xml version="1.0" encoding="iso-8859-1"\?>/';
 
@@ -58,6 +59,21 @@ class Base {
     }
     public function getActiveStack() {
         return $this->activeStack;
+    }
+
+    public function setBreakOnException($enabled) {
+        if ($this->activeConn && !$enabled) {
+            if ($enabled) {
+                $this->emitBreakOnException();
+            } else {
+                $this->emitBreakpointRemove($this->breakOnException['id']);
+            }
+        }
+
+        $this->breakOnException['enabled'] = $enabled;
+    }
+    public function getBreakOnException() {
+        return $this->breakOnException['enabled'];
     }
 
     /* Private API */

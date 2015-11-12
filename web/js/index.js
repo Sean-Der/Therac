@@ -44,5 +44,4 @@ breakpoints.render();
 var FileSearchView = require('./views/FileSearch.js'),
     fileSearch = new FileSearchView({el: $('#file-search-container'), webSocket: webSocket});
 
-webSocket.setViews(codeMirror, REPL, breakpoints, context, stacks, fileSearch);
-window.w = webSocket;
+webSocket.setViews(codeMirror, REPL, breakpoints, context, stacks, fileSearch, debugActions);

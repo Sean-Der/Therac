@@ -37,6 +37,9 @@ trait Handle {
     protected function handleInit($msg) {
         $this->emitStdout();
 
+        if ($this->breakOnException['enabled']) {
+            $this->emitBreakOnException();
+        }
         foreach ($this->breakPoints as $breakPoint) {
             $this->emitBreakpointSet($breakPoint['file'], $breakPoint['line']);
         }
@@ -61,6 +64,14 @@ trait Handle {
                 $this->Therac->WebSocket->emitFileContents($file);
                 $this->emitStackGet();
                 $this->emitContextNames(0);
+
+                if (isset($childAttributes['exception'])) {
+                    $err = $msg->children('xdebug', true);
+                    $err->addAttribute('type', 'stderr');
+                    $this->handleStream($err);
+                }
+
+
             } else if ((string) $attributes['status'] === 'stopping') {
                 $this->activeBreak = NULL;
                 $this->activeStack = [];
@@ -133,8 +144,13 @@ trait Handle {
             break;
 
         case 'breakpoint_set':
+            if ($this->breakOnException['transactionId'] ==  $msg->attributes()['transaction_id']) {
+                $this->breakOnException['id'] = (string) $msg->attributes()['id'];
+                break;
+            }
+
             foreach ($this->breakPoints as &$breakPoint) {
-                if ($breakPoint['transactionId'] ==  $msg->attributes()['transaction_id']) {
+                if ($breakPoint['transactionId'] == $msg->attributes()['transaction_id']) {
                     $breakPoint['id'] = (string) $msg->attributes()['id'];
                 }
             }

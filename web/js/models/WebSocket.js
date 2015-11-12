@@ -13,13 +13,14 @@ module.exports = require('backbone').Model.extend({
   },
 
   /* Public API */
-  setViews: function(codeMirror, REPL, breakpoints, context, stacks, fileSearch) {
+  setViews: function(codeMirror, REPL, breakpoints, context, stacks, fileSearch, debugActions) {
     this.codeMirror = codeMirror;
     this.REPL = REPL;
     this.breakpoints = breakpoints;
     this.context = context;
     this.stacks = stacks;
     this.fileSearch = fileSearch;
+    this.debugActions = debugActions;
 
     this.viewsSet.resolve();
   },
@@ -57,6 +58,10 @@ module.exports = require('backbone').Model.extend({
   emitGetContext: function(depth) {
     this._emitterBase('getContext', [depth]);
   },
+  emitSetBreakOnException: function(enabled) {
+    this._emitterBase('setBreakOnException', [enabled]);
+  },
+
 
   /* Handlers */
   _handleUniqID: function(uniqID) {
@@ -99,6 +104,9 @@ module.exports = require('backbone').Model.extend({
   },
   _handleActiveStack: function(stacks) {
     this.stacks.setStacks(stacks);
+  },
+  _handleBreakOnExceptionSet: function(enabled) {
+    this.debugActions.setBreakOnException(enabled);
   },
 
   _onMessage: function(e) {

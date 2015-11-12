@@ -38,6 +38,12 @@ trait Emit {
         $this->emitBase("stdout {$this->getNewTransactionId()} -c 1\00");
     }
 
+    private function emitBreakOnException() {
+        $transaction_id = $this->getNewTransactionId();
+        $this->emitBase("breakpoint_set $transaction_id -t exception -x *\00");
+        $this->breakOnException['transactionId'] = str_replace('-i ', '', $transaction_id);
+    }
+
     private function emitBreakpointSet($file, $line) {
         $transaction_id = $this->getNewTransactionId();
         $this->emitBase("breakpoint_set $transaction_id -t line -f file://$file -n $line\00");

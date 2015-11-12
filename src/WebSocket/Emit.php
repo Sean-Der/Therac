@@ -65,6 +65,10 @@ trait Emit {
         $this->baseEmit('uniqID', [$conn->uniqID], [$conn]);
     }
 
+    public function emitBreakOnExceptionSet() {
+        $this->baseEmit('breakOnExceptionSet', [ $this->Therac->Xdebug->getBreakOnException() ]);
+    }
+
     /* Private API */
     private function baseREPL($type, $data) {
         $lastLine = end($this->REPLState);

@@ -5,3 +5,7 @@
 #debug-actions-container {
   color: white;
 }
+
+#debug-actions-container a.CodeMirror-break-on-exception.enabled {
+  color: red;
+}

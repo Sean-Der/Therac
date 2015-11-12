@@ -33,6 +33,7 @@ class Base implements MessageComponentInterface {
         $this->emitActiveStack();
         $this->emitActiveFileSearch();
         $this->emitUniqID($conn);
+        $this->emitBreakOnExceptionSet();
 
         foreach ($this->REPLState as $line) {
             $this->baseEmit($line['type'], [$line['data']], [$conn]);
