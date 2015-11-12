@@ -132,6 +132,13 @@ trait Handle {
             $this->Therac->WebSocket->emitActiveStack();
             break;
 
+        case 'breakpoint_set':
+            foreach ($this->breakPoints as &$breakPoint) {
+                if ($breakPoint['transactionId'] ==  $msg->attributes()['transaction_id']) {
+                    $breakPoint['id'] = (string) $msg->attributes()['id'];
+                }
+            }
+            break;
         }
         $this->maybeEmitStreamCaches();
     }
