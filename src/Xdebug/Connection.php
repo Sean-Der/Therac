@@ -65,7 +65,6 @@ trait Connection {
         $this->activeConn->close();
         $this->activeConn = null;
         $this->xdebugConn->shutdown();
-        sleep(1);
         $this->connectionLoop();
     }
     private function setState($conn) {

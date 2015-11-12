@@ -1,6 +1,5 @@
 <?php
 namespace Therac\Xdebug;
-use React\Promise\Timer;
 
 trait Handle {
 
@@ -35,6 +34,12 @@ trait Handle {
 
 
     protected function handleInit($msg) {
+        $attributes = $msg->attributes();
+
+        if (in_array($attributes['fileuri'], $this->Therac->BLACKLISTED_FILES)) {
+            $this->closeActiveConn();
+        }
+
         $this->emitStdout();
 
         if ($this->breakOnException['enabled']) {

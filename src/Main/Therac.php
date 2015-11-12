@@ -18,11 +18,13 @@ class Therac {
   public $XDEBUG_PORT;
   public $SEARCH_DIRECTORIES;
   public $EXCLUDED_DIRECTORIES;
+  public $BLACKLISTED_FILES;
 
-  function __construct($xdebugPort, $websocketPort, $searchDirectories, $excludedDirectories) {
+  function __construct($xdebugPort, $websocketPort, $searchDirectories, $excludedDirectories, $blacklistedFiles) {
     $this->XDEBUG_PORT = $xdebugPort;
     $this->SEARCH_DIRECTORIES = $searchDirectories;
     $this->EXCLUDED_DIRECTORIES = $excludedDirectories;
+    $this->BLACKLISTED_FILES = $blacklistedFiles;
 
     $loop = Factory::create();
 

@@ -5,11 +5,12 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 use Therac\Main\Therac;
 
 
-$options = getopt("x::w::s::e::h", [
+$options = getopt("x::w::s::e::b::h", [
   "search-directories::",
   "excluded-directories::",
   "xdebug-port::",
   "websocket-port::",
+  "blacklisted-files::",
   "help"
 ]);
 
@@ -22,6 +23,9 @@ if (isset($options['help']) || isset($options['h'])) {
 
 -e, --exclude-directories
     Directories that are excluded via the file finder
+
+-b, --blacklisted-files
+    Files that Therac will never start a debugging session in, even for breaks/exceptions
 
 -x, --xdebug-port
     Port to listen for incoming Xdebug connnections, defaults to 9089
@@ -59,12 +63,23 @@ if (isset($options['excluded-directories'])) {
   $excludedDirectories = $options['e'];
 }
 
+$blacklistedFiles = [];
+if (isset($options['blacklisted-files'])) {
+  $blacklistedFiles = $options['blacklisted-files'];
+} else if (isset($options['b'])) {
+  $blacklistedFiles = $options['b'];
+}
+
+
 if (!is_array($searchDirectories)) {
   $searchDirectories = [$searchDirectories];
 }
 if (!is_array($excludedDirectories)) {
   $excludedDirectories = [$excludedDirectories];
 }
+if (!is_array($blacklistedFiles)) {
+  $blacklistedFiles = [$blacklistedFiles];
+}
 
 
-new Therac($xdebugPort, $websocketPort, $searchDirectories, $excludedDirectories);
+new Therac($xdebugPort, $websocketPort, $searchDirectories, $excludedDirectories, $blacklistedFiles);
