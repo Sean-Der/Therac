@@ -14,18 +14,25 @@ module.exports = require('backbone').View.extend({
         this.el.innerHTML = ContextsTemplate();
     },
     events: {
-        "mouseenter .context-name span": "_onEnterValue",
-        "mouseleave .context-name": "_onLeaveValue"
+        "click .context-name .fa": "_onArrowClick",
     },
-    _onEnterValue: function(e) {
-        var parent = $(e.currentTarget).parent();
+    _onArrowClick: function(e) {
+        var current = $(e.currentTarget),
+            parent = $(e.currentTarget).parent();
 
-        $(e.currentTarget).addClass('bold');
-        parent.find('.context-value').slideDown();
-    },
-    _onLeaveValue: function(e) {
-        $(e.currentTarget).find('span').removeClass('bold');
-        $(e.currentTarget).find('.context-value').slideUp();
+        if (current.hasClass('fa-angle-up')) {
+            parent.find('span').addClass('bold');
+            parent.find('.context-value').slideDown();
+            parent.find('.fa-angle-up').
+                removeClass('fa-angle-up').
+                addClass('fa-angle-down');
+        } else {
+            parent.find('span').removeClass('bold');
+            parent.find('.context-value').slideUp();
+            parent.find('.fa-angle-down').
+                removeClass('fa-angle-down').
+                addClass('fa-angle-up');
+        }
     },
 
     setContext: function(context) {
