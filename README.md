@@ -27,6 +27,7 @@ The following design goals guide the project.
 * **Easy to setup and deploy** -- Make it part of the default install in a developer environment, taking away the frustration of setting up and configuring a debugger.
 * **Pair Debugging** -- Everything from scrolling to REPL input is shared between users, making debugging easier (especially for remote workers!) This also means you can close
 the tab and when you come back your breakpoint will still be active.
+* **Hackable** -- Most debuggers are written in C, or are integrated into existing IDEs. Therac is written in PHP/Javascript making it easy to improve and extend!
 
 Requirements
 --
