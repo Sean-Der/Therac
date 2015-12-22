@@ -6,7 +6,7 @@ expect from a standard debugger. However, especially tailored to perform
 debugging with a friend. Some of my favorite features include.
 
 * **State is synchronized across multiple browsers, so you can fix problems with a friend**
-![alt text](http://i.imgur.com/xjd2Ei1.gif "synchronized across multiple browsers")
+![alt text](http://i.imgur.com/SoLLD2A.gif "synchronized across multiple browsers")
 
 * **REPL to debug and write code on the fly**
 ![alt text](http://i.imgur.com/AiwhlhU.gif "REPL")
