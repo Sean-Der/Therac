@@ -28,14 +28,14 @@ if (isset($options['help']) || isset($options['h'])) {
     Files that Therac will never start a debugging session in, even for breaks/exceptions
 
 -x, --xdebug-port
-    Port to listen for incoming Xdebug connnections, defaults to 9089
+    Port to listen for incoming Xdebug connnections, defaults to 9000
 
 -w, --websocket-port
     Port to listen for incoming Websocket connnections, defaults to 4433";
   return 0;
 }
 
-$xdebugPort = 9089;
+$xdebugPort = 9000;
 if (isset($options['xdebug-port'])) {
   $xdebugPort = $options['xdebug-port'];
 } else if (isset($options['x'])) {
