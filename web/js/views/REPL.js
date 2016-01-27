@@ -16,7 +16,7 @@ module.exports = require('backbone').View.extend({
             useStyle: true,
             cursorBlink: true,
             handler: function(data) {
-                // 0x7f is the UTF-8 charcter for delete
+                // 0x7f is the UTF-8 character for delete
                 // this handles backspaces
                 if (data === '\x7f') {
                     data = '\b \b';
