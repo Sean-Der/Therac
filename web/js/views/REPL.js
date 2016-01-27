@@ -7,21 +7,25 @@ module.exports = require('backbone').View.extend({
     initialize: function(args) {
         this.webSocket = args.webSocket;
     },
-    _onKey: function(key, event) {
-        if (event.keyCode === 8) {
-            key = '\b \b';
-        }
-        this.webSocket.emitREPLInput(key);
-    },
     render: function() {
+        var self = this;
+
         this.term = TermJS({
             cols: 120,
             rows: 24,
             useStyle: true,
             cursorBlink: true,
+            handler: function(data) {
+                // 0x7f is the UTF-8 charcter for delete
+                // this handles backspaces
+                if (data === '\x7f') {
+                    data = '\b \b';
+                }
+
+                self.webSocket.emitREPLInput(data);
+            }
         });
 
-        this.term.on('key', _.bind(this._onKey, this));
         this.term.open(this.el);
     },
 
