@@ -23,7 +23,6 @@ trait Emit {
         foreach($this->Therac->Xdebug->getBreakpoints($file) as $breakPoint) {
             $this->emitBreakpointSet($breakPoint['file'], $breakPoint['line']);
         }
-        $this->emitActiveLineSet();
     }
 
     public function emitREPLInput($input) {

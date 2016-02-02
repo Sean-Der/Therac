@@ -62,7 +62,9 @@ module.exports = require('backbone').View.extend({
     },
     setEditorValue: function(file, value) {
         this.activeFile = file;
-        this.editor.setValue(value);
+        if (this.editor.getValue() != value) {
+            this.editor.setValue(value);
+        }
     },
     setBreakpoint: function(file, lineNum) {
         if (file !== this.activeFile) {
@@ -83,10 +85,25 @@ module.exports = require('backbone').View.extend({
             }
             this.currentBreak = null;
         } else {
-            this.editor.scrollIntoView({line: lineNum, ch: 0});
-            lineNum = parseInt(lineNum) - 1;
-            this.currentBreak = lineNum;
-            this.editor.addLineClass(lineNum, 'background', this.BREAK_CSS_CLASS);
+            if (this.currentBreak !== null) {
+                this.editor.removeLineClass(this.currentBreak, 'background', this.BREAK_CSS_CLASS);
+            }
+
+            var clientHeight = this.editor.getScrollInfo().clientHeight,
+                lineInt = parseInt(lineNum),
+                lineHeight = this.editor.heightAtLine(lineInt);
+
+            // scroll to the new break
+            // if it isn't already in view
+            if (lineHeight < 0 || lineHeight > clientHeight) {
+                var t = this.editor.charCoords({line: lineNum, ch: 0}, "local").top;
+                var middleHeight = this.editor.getScrollerElement().offsetHeight / 2;
+                this.editor.scrollTo(null, t - middleHeight);
+            }
+
+            lineInt = lineInt - 1;
+            this.currentBreak = lineInt;
+            this.editor.addLineClass(lineInt, 'background', this.BREAK_CSS_CLASS);
         }
     },
     setActiveLine: function(lineNum) {
